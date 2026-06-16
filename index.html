@@ -659,7 +659,7 @@ const PAL=['#15151A','#3C3C45','#63636D','#8E8E97','#BCBCC4'];
 const BACKEND_URL="https://script.google.com/macros/s/AKfycbyyQO5MJS_Rjv_WBPLVBfyJqMFpZFeR0u9_I5bl-7RrOkfk7SrswgsNYUvyN-LChr89/exec";
 let CONNECTED=!!BACKEND_URL;
 function jsonp(params){return new Promise((resolve,reject)=>{const cb='cf_cb_'+Math.random().toString(36).slice(2);let done=false;const s=document.createElement('script');window[cb]=d=>{done=true;cleanup();resolve(d);};function cleanup(){try{delete window[cb];}catch(e){window[cb]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);}s.onerror=()=>{if(!done){cleanup();reject(new Error('rede'));}};const qs=Object.keys(params).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');s.src=BACKEND_URL+(BACKEND_URL.indexOf('?')>=0?'&':'?')+qs+'&callback='+cb;document.body.appendChild(s);setTimeout(()=>{if(!done){cleanup();reject(new Error('timeout'));}},15000);});}
-async function backendPost(payload){try{await fetch(BACKEND_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});}catch(e){}}
+async function backendPost(payload){try{payload.token=(session&&session.token)||'';await fetch(BACKEND_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});}catch(e){}}
 
 let people=[],groups=[],events=[],history=[];
 let auth=JSON.parse(JSON.stringify(DEFAULT_AUTH)),identity=JSON.parse(JSON.stringify(DEFAULT_IDENTITY)),sheetsUrl='';
@@ -684,7 +684,7 @@ async function safeSet(k,v){await _set(k,typeof v==='string'?v:JSON.stringify(v)
 async function loadData(){
   if(CONNECTED){
     try{
-      const d=await jsonp({action:'load'});
+      const d=await jsonp({action:'load',token:(session&&session.token)||''});
       if(!d||!d.ok)throw new Error((d&&d.error)||'resposta inválida');
       people=d.people||[];groups=d.groups||[];events=d.events||[];history=d.history||[];
       identity=d.identity||JSON.parse(JSON.stringify(DEFAULT_IDENTITY));
@@ -1033,16 +1033,21 @@ async function doLogin(){
   const u=byId('loginUser').value.trim(),p=byId('loginPass').value;
   byId('loginErr').textContent='';
   let role='';
+  let token='';
   if(CONNECTED){
     byId('loginErr').textContent='Entrando…';
-    try{const r=await jsonp({action:'login',user:u,pass:p});if(r&&r.ok&&r.role)role=r.role;}catch(e){byId('loginErr').textContent='Sem conexão com o servidor. Tente novamente.';return;}
+    try{const r=await jsonp({action:'login',user:u,pass:p});if(r&&r.ok&&r.role){role=r.role;token=r.token||'';}}catch(e){byId('loginErr').textContent='Sem conexão com o servidor. Tente novamente.';return;}
+    if(!role){byId('loginErr').textContent='Usuário ou senha inválidos.';byId('loginPass').value='';return;}
+    session={role,user:u,token:token};
+    byId('loginErr').textContent='Carregando…';
+    await loadData();
   }else{
     const A=(auth&&auth.admin)?auth:DEFAULT_AUTH;
     if(A.admin&&u===A.admin.user&&p===A.admin.pass)role='admin';
     else if(A.igreja&&u===A.igreja.user&&p===A.igreja.pass)role='igreja';
+    if(!role){byId('loginErr').textContent='Usuário ou senha inválidos.';byId('loginPass').value='';return;}
+    session={role,user:u,token:''};
   }
-  if(!role){byId('loginErr').textContent='Usuário ou senha inválidos.';byId('loginPass').value='';return;}
-  session={role,user:u};
   byId('loginErr').textContent='';byId('loginPass').value='';
   byId('loginScreen').style.display='none';
   byId('roleTxt').textContent=role==='admin'?'Administrador':'Igreja';
@@ -1087,9 +1092,9 @@ function startApp(){applyIdentity();fillAllFilters();updateCounts();renderDash()
 async function refreshFromServer(){
   if(!CONNECTED||!session.role)return;
   if(byId('overlay').classList.contains('open')||byId('modalOv').classList.contains('open')||byId('attOv').classList.contains('open'))return;
-  try{const d=await jsonp({action:'load'});if(d&&d.ok){people=d.people||people;groups=d.groups||groups;events=d.events||events;history=d.history||history;if(d.identity){identity=d.identity;applyIdentity();}fillAllFilters();refreshActive();}}catch(e){}
+  try{const d=await jsonp({action:'load',token:(session&&session.token)||''});if(d&&d.ok){people=d.people||people;groups=d.groups||groups;events=d.events||events;history=d.history||history;if(d.identity){identity=d.identity;applyIdentity();}fillAllFilters();refreshActive();}}catch(e){}
 }
-(async function init(){await loadData();applyIdentity();})();
+(async function init(){if(CONNECTED){applyIdentity();}else{await loadData();applyIdentity();}})();
 </script>
 </body>
 </html>
