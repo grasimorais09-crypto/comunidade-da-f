@@ -656,7 +656,7 @@ const PAL=['#15151A','#3C3C45','#63636D','#8E8E97','#BCBCC4'];
 /* ========= BANCO CENTRAL (Google Sheets via Apps Script) =========
    Cole a URL /exec do Apps Script entre as aspas abaixo para ativar o banco
    central compartilhado. Vazio = modo local (cada navegador guarda o seu). */
-const BACKEND_URL="";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbyyQO5MJS_Rjv_WBPLVBfyJqMFpZFeR0u9_I5bl-7RrOkfk7SrswgsNYUvyN-LChr89/exec";
 let CONNECTED=!!BACKEND_URL;
 function jsonp(params){return new Promise((resolve,reject)=>{const cb='cf_cb_'+Math.random().toString(36).slice(2);let done=false;const s=document.createElement('script');window[cb]=d=>{done=true;cleanup();resolve(d);};function cleanup(){try{delete window[cb];}catch(e){window[cb]=undefined;}if(s.parentNode)s.parentNode.removeChild(s);}s.onerror=()=>{if(!done){cleanup();reject(new Error('rede'));}};const qs=Object.keys(params).map(k=>encodeURIComponent(k)+'='+encodeURIComponent(params[k])).join('&');s.src=BACKEND_URL+(BACKEND_URL.indexOf('?')>=0?'&':'?')+qs+'&callback='+cb;document.body.appendChild(s);setTimeout(()=>{if(!done){cleanup();reject(new Error('timeout'));}},15000);});}
 async function backendPost(payload){try{await fetch(BACKEND_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});}catch(e){}}
