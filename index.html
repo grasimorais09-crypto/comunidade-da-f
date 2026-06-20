@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Comunidade da Fé · Church</title>
 <meta name="theme-color" content="#0B0B0E">
 <meta name="mobile-web-app-capable" content="yes">
@@ -271,9 +271,9 @@ tbody td{padding:12px 18px;vertical-align:middle}
 @media(max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr 1fr}.grid3 .card:last-child{grid-column:1/-1}.dashrow{grid-template-columns:1fr}}
 @media(max-width:860px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:0;top:0;width:262px;z-index:70;transform:translateX(-100%);transition:transform .25s}
+  .sidebar{position:fixed;left:0;top:0;width:262px;z-index:70;transform:translateX(-100%);transition:transform .25s;padding-top:env(safe-area-inset-top)}
   .sidebar.open{transform:none}
-  .topbar{display:flex;align-items:center;gap:13px;padding:14px 18px;background:var(--grad-dark);color:#fff;position:sticky;top:0;z-index:30}
+  .topbar{display:flex;align-items:center;gap:13px;padding:calc(14px + env(safe-area-inset-top)) 18px 14px;background:var(--grad-dark);color:#fff;position:sticky;top:0;z-index:30}
   .topbar .mbtn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.1);display:grid;place-items:center}
   .topbar .mbtn svg{width:20px;height:20px}
   .topbar .tt{font-family:'Fraunces',serif;font-weight:600;font-size:16px}
@@ -297,7 +297,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
   .admin-grid{grid-template-columns:1fr}
 }
 /* LOGIN */
-#loginScreen{position:fixed;inset:0;z-index:200;background:var(--grad-side);display:grid;place-items:center;padding:24px}
+#loginScreen{position:fixed;inset:0;z-index:200;background:var(--grad-side);display:grid;place-items:center;overflow:auto;padding:calc(24px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom))}
 #loginScreen::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,rgba(255,255,255,.08),transparent 60%);pointer-events:none}
 .login-card{position:relative;z-index:1;width:382px;max-width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:34px 32px;backdrop-filter:blur(8px);box-shadow:0 30px 80px rgba(0,0,0,.5)}
 .login-card .lmark{width:56px;height:56px;border-radius:15px;background:linear-gradient(150deg,#3A3A46,#0E0E12);display:grid;place-items:center;margin:0 auto 18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
