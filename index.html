@@ -216,7 +216,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
 .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--ink-3);background:#fff;box-shadow:0 0 0 3px rgba(38,38,47,.08)}
 .fld select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236C6C75' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;cursor:pointer}
 .fld textarea{min-height:78px;resize:vertical;line-height:1.5}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.ulabel-h{font-size:13px;font-weight:700;color:#14233D;margin:16px 0 4px}.ucard{border:1px solid #E6E6EE;border-radius:12px;padding:12px 13px;margin-bottom:11px;background:#FAFAFC}.ucard .ulabel{font-size:11px;font-weight:700;color:#5B6473;margin-bottom:9px;text-transform:uppercase;letter-spacing:.05em}
 .seg{display:flex;flex-direction:column;gap:7px}
 .opt{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1px solid var(--border-2);border-radius:11px;font-weight:600;font-size:13px;transition:.13s;color:var(--text)}
 .opt:hover{border-color:var(--ink-3);background:var(--silver)}
@@ -236,6 +236,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
 .wa-cta{flex:1;background:var(--wa);color:#fff;justify-content:center}.wa-cta:hover{background:#1FB857}
 .wa-cta.off{background:#EDEDF0;color:var(--muted-2);pointer-events:none}
 .del-btn{background:#fff;color:var(--rose);box-shadow:inset 0 0 0 1px #E8CFCF}.del-btn:hover{background:#FBF1F1}
+body.not-admin .del-row,body.not-admin .del-btn{display:none!important}
 
 .modal-ov{position:fixed;inset:0;background:rgba(11,11,14,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:.2s;z-index:60;display:grid;place-items:center;padding:20px}
 .modal-ov.open{opacity:1;pointer-events:auto}
@@ -337,11 +338,11 @@ tbody td{padding:12px 18px;vertical-align:middle}
     <div class="lsub">Church · Acesso à plataforma</div>
     <div class="login-err" id="loginErr"></div>
     <label>Usuário</label>
-    <input id="loginUser" type="text" placeholder="admin ou igreja" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    <input id="loginUser" type="text" placeholder="seu usuário" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
     <label>Senha</label>
     <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="lbtn" onclick="doLogin()">Entrar</button>
-    <div class="login-note">Dois perfis: <b style="color:#9A9AA6">admin</b> (controla configurações) e <b style="color:#9A9AA6">igreja</b> (uso diário). Troque as senhas no painel de Administração.</div>
+    <div class="login-note">Dois perfis: <b style="color:#9A9AA6">admin</b> (controla configurações) e <b style="color:#9A9AA6">gestão</b> (uso diário). Troque as senhas no painel de Administração.</div>
   </div>
 </div>
 <div class="sb-scrim" id="scrim" onclick="toggleSidebar(false)"></div>
@@ -366,7 +367,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
       <div class="rolepill" id="rolePill"><span class="rd"></span><span id="roleTxt">—</span></div>
       <button class="logoutbtn" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sair</button>
       <div class="sync" id="sync"><span class="dot"></span><span id="syncTxt">Sincronizado</span></div>
-      <div class="v">Plataforma de gestão da igreja<br>&copy; Comunidade da Fé</div>
+      <div class="v">Plataforma de gestão da igreja<br>&copy; Comunidade da Fé<br><span style="color:#9DA8C0">Desenvolvido pela <b style="color:#C7D2E8">Smart Automation</b></span></div>
     </div>
   </aside>
 
@@ -415,12 +416,6 @@ tbody td{padding:12px 18px;vertical-align:middle}
         </div>
       </div>
       <div class="viewbody">
-        <div class="formbox">
-          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-          <div class="tx"><b>Formulário de interesse (Google Forms)</b><small>Cole o link CSV da planilha de respostas (publicada na web) para puxar quem respondeu o formulário direto pra cá.</small></div>
-          <div class="ipt"><input id="formUrl" type="text" placeholder="https://docs.google.com/.../pub?output=csv"></div>
-          <button class="btn btn-light" onclick="syncForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Sincronizar respostas</button>
-        </div>
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="mQ" type="text" placeholder="Buscar por nome, telefone ou bairro…" oninput="renderMembros()"></div>
           <select class="filter" id="mSit" onchange="renderMembros()"></select>
@@ -450,6 +445,12 @@ tbody td{padding:12px 18px;vertical-align:middle}
           <div class="card"><div class="card-h"><h3>Por fase</h3><span class="eyebrow">decisão · intenção</span></div><div class="chart-wrap"><canvas id="chFase"></canvas></div></div>
           <div class="card"><div class="card-h"><h3>Situação do contato</h3><span class="eyebrow">funil</span></div><div class="chart-wrap"><canvas id="chStatus"></canvas></div></div>
           <div class="card"><div class="card-h"><h3>Carga por voluntário</h3><span class="eyebrow">total vs. confirmados</span></div><div class="chart-wrap"><canvas id="chVol"></canvas></div></div>
+        </div>
+        <div class="formbox">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="tx"><b>Formulário de batismo (Google Forms)</b><small>Cole o link CSV da planilha de respostas do formulário de batismo (publicada na web). Quem se inscreveu entra automaticamente como candidato a batismo.</small></div>
+          <div class="ipt"><input id="formUrl" type="text" placeholder="https://docs.google.com/.../pub?output=csv"></div>
+          <button class="btn btn-light" onclick="syncForm()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Sincronizar respostas</button>
         </div>
         <div class="toolbar">
           <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="bQ" type="text" placeholder="Buscar por nome ou telefone…" oninput="renderBatismo()"></div>
@@ -526,8 +527,17 @@ tbody td{padding:12px 18px;vertical-align:middle}
             <div class="adesc">Defina usuário e senha de cada perfil. As alterações valem para todos que abrirem a plataforma.</div>
             <div class="fld"><label>Administrador — usuário</label><input id="cAdmU" type="text"></div>
             <div class="fld"><label>Administrador — senha</label><input id="cAdmP" type="text"></div>
-            <div class="fld"><label>Igreja — usuário</label><input id="cIgrU" type="text"></div>
-            <div class="fld"><label>Igreja — senha</label><input id="cIgrP" type="text"></div>
+            <div class="ulabel-h">Perfis de gestão (operacional)</div>
+            <div class="adesc">Até 3 perfis de gestão, cada um com seu acesso — todos com a mesma visão operacional (não acessam as configurações).</div>
+            <div class="ucard"><div class="ulabel">Gestão 1</div>
+              <div class="fld"><label>Nome</label><input id="u1n" type="text"></div>
+              <div class="row2"><div class="fld"><label>Usuário</label><input id="u1u" type="text"></div><div class="fld"><label>Senha</label><input id="u1p" type="text"></div></div></div>
+            <div class="ucard"><div class="ulabel">Gestão 2 (opcional)</div>
+              <div class="fld"><label>Nome</label><input id="u2n" type="text"></div>
+              <div class="row2"><div class="fld"><label>Usuário</label><input id="u2u" type="text"></div><div class="fld"><label>Senha</label><input id="u2p" type="text"></div></div></div>
+            <div class="ucard"><div class="ulabel">Gestão 3 (opcional)</div>
+              <div class="fld"><label>Nome</label><input id="u3n" type="text"></div>
+              <div class="row2"><div class="fld"><label>Usuário</label><input id="u3u" type="text"></div><div class="fld"><label>Senha</label><input id="u3p" type="text"></div></div></div>
             <button class="btn btn-dark btn-sm" onclick="saveCreds()">Salvar credenciais</button>
           </div>
           <div class="acard">
@@ -596,6 +606,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
       <div class="fld"><label>Nome completo *</label><input id="fNome" type="text" placeholder="Ex.: Maria Oliveira"></div>
       <div class="row2"><div class="fld"><label>Telefone</label><input id="fTel" type="text" placeholder="(19) 99999-9999"></div><div class="fld"><label>E-mail</label><input id="fEmail" type="text" placeholder="opcional"></div></div>
       <div class="row2"><div class="fld"><label>Bairro / Cidade</label><input id="fBairro" type="text" placeholder="opcional"></div><div class="fld"><label>Nascimento</label><input id="fNasc" type="date"></div></div>
+      <div class="row2"><div class="fld"><label>Tamanho de camiseta</label><input id="fCamiseta" type="text" placeholder="PP, P, M, G, GG, XG…" list="sizelist"><datalist id="sizelist"><option value="PP"><option value="P"><option value="M"><option value="G"><option value="GG"><option value="XG"><option value="EXG"></datalist></div><div class="fld"></div></div>
       <div class="row2"><div class="fld"><label>Situação na igreja</label><select id="fSit"></select></div><div class="fld"><label>Grupo / Célula</label><input id="fGrupo" type="text" list="grupoList" placeholder="opcional"></div></div>
       <div class="fld"><label>Responsável pelo acompanhamento</label><input id="fResp" type="text" placeholder="Ex.: voluntário responsável"></div>
       <div class="fld" style="margin-top:4px"><div class="toggle"><div class="tx">Candidato a batismo<small>Entra na jornada de batismo</small></div><div class="sw" id="fBat" onclick="this.classList.toggle('on')"></div></div></div>
@@ -807,7 +818,7 @@ function waCell(p){return p.wa?`<div class="rowacts"><a class="iconbtn wa-btn" h
 function waIcon(p){return p.wa?`<a class="iconbtn wa-btn" href="${p.wa}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Z"/></svg></a>`:`<span class="iconbtn wa-btn wa-off"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z"/></svg></span>`;}
 function delIcon(p){return `<button class="iconbtn del-row" onclick="event.stopPropagation();removePerson('${p.id}')" title="Excluir da plataforma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/></svg></button>`;}
 function actCell(p){return `<div class="rowacts">${waIcon(p)}${delIcon(p)}</div>`;}
-function removePerson(id){const p=people.find(x=>x.id===id);if(!p)return;if(!confirm('Excluir '+p.nome+' da plataforma? Esta ação não pode ser desfeita.'))return;people=people.filter(x=>x.id!==id);if(current&&current.id===id)closePanel();scheduleSave();logH('Exclusão','Pessoa removida: '+p.nome);fillAllFilters();refreshActive();toast(p.nome.split(' ')[0]+' removido(a) da plataforma');}
+function removePerson(id){if(session.role!=='admin'){toast('Apenas o administrador pode excluir.');return;}const p=people.find(x=>x.id===id);if(!p)return;if(!confirm('Excluir '+p.nome+' da plataforma? Esta ação não pode ser desfeita.'))return;people=people.filter(x=>x.id!==id);if(current&&current.id===id)closePanel();scheduleSave();logH('Exclusão','Pessoa removida: '+p.nome);fillAllFilters();refreshActive();toast(p.nome.split(' ')[0]+' removido(a) da plataforma');}
 
 /* ====================== BATISMO ====================== */
 function bSet(){return people.filter(p=>p.batismo);}
@@ -917,6 +928,7 @@ function openPanel(id){
     <div class="sec-title">Dados pessoais</div>
     <div class="row2"><div class="fld"><label>Telefone</label><input type="text" value="${esc(p.tel)}" onchange="upd('tel',this.value)"></div><div class="fld"><label>E-mail</label><input type="text" value="${esc(p.email)}" onchange="upd('email',this.value)"></div></div>
     <div class="row2"><div class="fld"><label>Bairro / Cidade</label><input type="text" value="${esc(p.bairro)}" onchange="upd('bairro',this.value)"></div><div class="fld"><label>Nascimento</label><input type="date" value="${esc(p.nasc)}" onchange="upd('nasc',this.value)"></div></div>
+    <div class="row2"><div class="fld"><label>Tamanho de camiseta</label><input type="text" value="${esc(p.camiseta||'')}" placeholder="PP, P, M, G, GG…" list="sizelistp" onchange="upd('camiseta',this.value)"><datalist id="sizelistp"><option value="PP"><option value="P"><option value="M"><option value="G"><option value="GG"><option value="XG"><option value="EXG"></datalist></div><div class="fld"></div></div>
     <div class="sec-title">Igreja</div>
     <div class="row2"><div class="fld"><label>Situação</label><select onchange="upd('situacao',this.value)">${SITUACOES.map(s=>`<option ${p.situacao===s?'selected':''}>${s}</option>`).join('')}</select></div><div class="fld"><label>Grupo / Célula</label><input type="text" list="grupoList" value="${esc(p.grupo)}" onchange="upd('grupo',this.value)"></div></div>
     <div class="fld"><label>Responsável</label><input type="text" value="${esc(p.resp)}" onchange="upd('resp',this.value)"></div>
@@ -942,7 +954,7 @@ function toggleBat(){current.batismo=!current.batismo;stamp();byId('panel').quer
 function setStatus(s){current.statusContato=s;if(s!==STATUS[0]&&!current.contatado){current.contatado=true;current.dataContato=nowStr();const t=byId('panel').querySelector('[data-sw="contato"]');if(t)t.classList.add('on');const cm=byId('contMeta');if(cm)cm.textContent='Contatado em '+current.dataContato;}stamp();refreshSeg('segStatus',STATUS,s);scheduleSave();logH('Batismo','Situação de '+current.nome+' → '+s);}
 function setResp(s){current.resposta=s;stamp();refreshSeg('segResp',RESP,s);scheduleSave();logH('Batismo','Resposta de '+current.nome+' → '+s);}
 function refreshSeg(id,arr,sel){[...byId(id).children].forEach((b,i)=>b.classList.toggle('sel',arr[i]===sel));}
-function delPerson(){if(!current)return;if(!confirm('Excluir '+current.nome+' definitivamente?'))return;const _nm=current.nome;people=people.filter(p=>p.id!==current.id);scheduleSave();closePanel();logH('Exclusão','Pessoa removida: '+_nm);toast('Pessoa removida');}
+function delPerson(){if(session.role!=='admin'){toast('Apenas o administrador pode excluir.');return;}if(!current)return;if(!confirm('Excluir '+current.nome+' definitivamente?'))return;const _nm=current.nome;people=people.filter(p=>p.id!==current.id);scheduleSave();closePanel();logH('Exclusão','Pessoa removida: '+_nm);toast('Pessoa removida');}
 
 /* ====================== NOVA PESSOA ====================== */
 function openForm(asBatismo){
@@ -957,24 +969,26 @@ function closeForm(){byId('modalOv').classList.remove('open');}
 function savePerson(){
   const nome=byId('fNome').value.trim();if(!nome){byId('fNome').focus();byId('fNome').style.borderColor='#C97A7A';return;}
   const tel=byId('fTel').value.trim(),maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);
-  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
+  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:byId('fCamiseta').value.trim(),obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
   scheduleSave();closeForm();fillAllFilters();refreshActive();logH('Cadastro','Nova pessoa: '+nome+(byId('fBat').classList.contains('on')?' (candidato batismo)':''));toast(nome.split(' ')[0]+' cadastrado(a) com sucesso');
 }
 
 /* ====================== EXPORT / IMPORT / FORMULÁRIO ====================== */
 function dl(wsData,nome){const ws=XLSX.utils.json_to_sheet(wsData);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Dados');XLSX.writeFile(wb,nome+'_'+new Date().toISOString().slice(0,10)+'.xlsx');}
-function exportPeople(){dl(people.map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'E-mail':p.email,'Bairro/Cidade':p.bairro,'Nascimento':p.nasc,'Situação':p.situacao,'Grupo':p.grupo,'Responsável':p.resp,'Contatado':p.contatado?'Sim':'Não','Data do contato':p.dataContato,'Candidato batismo':p.batismo?'Sim':'Não','Fase':p.batismo?p.fase:'','Situação contato':p.batismo?p.statusContato:'','Resposta':p.batismo?p.resposta:'','Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Pessoas');toast('Planilha de pessoas exportada');}
-function exportBatismo(){dl(bSet().map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Fase':p.fase,'Voluntário':p.resp,'Situação contato':p.statusContato,'Resposta':p.resposta,'Origem':p.origem,'Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Batismo');toast('Planilha de batismo exportada');}
+function exportPeople(){dl(people.map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'E-mail':p.email,'Bairro/Cidade':p.bairro,'Nascimento':p.nasc,'Situação':p.situacao,'Grupo':p.grupo,'Responsável':p.resp,'Contatado':p.contatado?'Sim':'Não','Data do contato':p.dataContato,'Candidato batismo':p.batismo?'Sim':'Não','Fase':p.batismo?p.fase:'','Situação contato':p.batismo?p.statusContato:'','Resposta':p.batismo?p.resposta:'','Tamanho camiseta':p.camiseta||'','Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Pessoas');toast('Planilha de pessoas exportada');}
+function exportBatismo(){dl(bSet().map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Fase':p.fase,'Voluntário':p.resp,'Situação contato':p.statusContato,'Resposta':p.resposta,'Tamanho camiseta':p.camiseta||'','Origem':p.origem,'Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Batismo');toast('Planilha de batismo exportada');}
 function exportPending(){dl(people.filter(p=>!p.contatado).map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Situação':p.situacao,'Responsável':p.resp,'WhatsApp':p.wa||''})),'ComunidadeDaFe_AContatar');toast('Pendentes exportados');}
-function rowToPerson(get,maxN,sufix){const nome=get('nome')||get('nome completo');if(!nome)return null;const tel=get('telefone')||get('fone')||get('whatsapp')||get('celular');return {id:'p'+Date.now()+'-'+sufix,n:maxN,nome,tel,email:get('mail')||get('e-mail'),bairro:get('bairro')||get('cidade')||get('endereço'),nasc:'',situacao:get('situ')||'Visitante',grupo:get('grupo')||get('célula')||get('celula'),resp:get('respons')||get('volunt')||get('líder'),contatado:false,dataContato:'',batismo:!!get('fase')||/batismo|batizar/i.test(get('interesse')||''),fase:get('fase')||'Decisão',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,obs:get('observ')||get('mensagem')||'',criadoEm:new Date().toISOString(),updated:nowStr()};}
+function toISODate(s){s=(s||'').trim();if(!s)return '';let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+String(m[2]).padStart(2,'0')+'-'+String(m[3]).padStart(2,'0');m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y=(+y>30?'19':'20')+y;if(+mo>12&&+d<=12){const t=d;d=mo;mo=t;}return y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0');}return '';}
+function parseCSV(text){const lines=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===','){row.push(cur);cur='';}else if(c==='\n'){row.push(cur);lines.push(row);row=[];cur='';}else if(c==='\r'){}else cur+=c;}}if(cur!==''||row.length){row.push(cur);lines.push(row);}if(!lines.length)return [];const head=lines[0].map(h=>h.trim());return lines.slice(1).filter(r=>r.some(x=>(x||'').trim()!=='')).map(r=>{const o={};head.forEach((h,i)=>o[h]=(r[i]||'').trim());return o;});}
+function rowToPerson(get,maxN,sufix){const nome=get('nome')||get('nome completo');if(!nome)return null;const tel=get('whatsapp')||get('telefone')||get('fone')||get('celular');const aulas=get('aulas')||get('participar'),camiseta=get('camiseta'),sexo=get('sexo');const ex=[];if(aulas)ex.push('Aulas: '+aulas);if(sexo)ex.push('Sexo: '+sexo);const obs=[(get('observ')||get('mensagem')||''),ex.join(' \u00b7 ')].filter(Boolean).join(' \u2014 ');return {id:'p'+Date.now()+'-'+sufix,n:maxN,nome,tel,email:get('mail')||get('e-mail'),bairro:get('bairro')||get('cidade')||get('endere\u00e7o'),nasc:toISODate(get('nascimento')||get('nasc')),situacao:get('situ')||'Visitante',grupo:get('grupo')||get('c\u00e9lula')||get('celula'),resp:get('respons')||get('volunt')||get('l\u00edder'),contatado:false,dataContato:'',batismo:!!get('fase')||/batismo|batizar/i.test(get('interesse')||''),fase:get('fase')||'',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:camiseta,obs:obs,criadoEm:new Date().toISOString(),updated:nowStr()};}
 function dedupKey(p){return (p.nome||'').toLowerCase().trim()+'|'+(p.tel||'').replace(/\D/g,'').slice(-8);}
-function importRows(rows){
+function importRows(rows,asBatismo){
   const existing=new Set(people.map(dedupKey));let add=0,skip=0,maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);
-  rows.forEach((r,i)=>{const get=k=>{const key=Object.keys(r).find(h=>h.toLowerCase().includes(k));return key?String(r[key]).trim():'';};const np=rowToPerson(get,maxN+1,i);if(!np)return;if(existing.has(dedupKey(np))){skip++;return;}maxN++;np.n=maxN;existing.add(dedupKey(np));people.push(np);add++;});
+  rows.forEach((r,i)=>{const get=k=>{const key=Object.keys(r).find(h=>h.toLowerCase().includes(k));return key?String(r[key]).trim():'';};const np=rowToPerson(get,maxN+1,i);if(!np)return;if(asBatismo){np.batismo=true;if(!np.fase)np.fase='Intenção Batismo';}else if(!np.fase){np.fase='Decisão';}if(existing.has(dedupKey(np))){skip++;return;}maxN++;np.n=maxN;existing.add(dedupKey(np));people.push(np);add++;});
   scheduleSave();fillAllFilters();refreshActive();
   logH('Importação',add+' pessoa(s) importada(s)'+(skip?' · '+skip+' duplicadas ignoradas':''));toast(add+' pessoa(s) adicionada(s)'+(skip?' · '+skip+' já existiam':''));
 }
-function importXLSX(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}importRows(rows);}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
+function importXLSX(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}importRows(rows,true);}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
 async function syncForm(){
   const url=byId('formUrl').value.trim();if(!url){byId('formUrl').focus();toast('Cole o link CSV do formulário.');return;}
   await safeSet(FK,url);
@@ -982,8 +996,7 @@ async function syncForm(){
   try{
     const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);
     const text=await res.text();
-    const wb=XLSX.read(text,{type:'string'});const sh=wb.Sheets[wb.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(sh,{defval:''});
+    const rows=parseCSV(text);
     if(!rows.length){toast('Nenhuma resposta encontrada na planilha.');return;}
     importRows(rows);
   }catch(err){
@@ -1051,13 +1064,14 @@ async function doLogin(){
   }else{
     const A=(auth&&auth.admin)?auth:DEFAULT_AUTH;
     if(A.admin&&u===A.admin.user&&p===A.admin.pass)role='admin';
-    else if(A.igreja&&u===A.igreja.user&&p===A.igreja.pass)role='igreja';
+    else{const us=A.users||[];for(let k=0;k<us.length;k++){if(us[k]&&u===us[k].user&&p===us[k].pass){role='igreja';break;}}}
+    if(!role&&A.igreja&&u===A.igreja.user&&p===A.igreja.pass)role='igreja';
     if(!role){byId('loginErr').textContent='Usuário ou senha inválidos.';byId('loginPass').value='';return;}
     session={role,user:u,token:''};
   }
   byId('loginErr').textContent='';byId('loginPass').value='';
   byId('loginScreen').style.display='none';
-  byId('roleTxt').textContent=role==='admin'?'Administrador':'Igreja';
+  byId('roleTxt').textContent=role==='admin'?'Administrador':'Gestão';
   byId('nav-admin').classList.toggle('role-hide',role!=='admin');
   byId('secSistema').classList.toggle('role-hide',role!=='admin');
   startApp();
@@ -1067,24 +1081,29 @@ function logout(){logH('Logout','Saiu da plataforma');session={role:'',user:''};
 
 /* ====================== ADMIN ====================== */
 function renderAdmin(){
-  if(CONNECTED){byId('cAdmU').value='';byId('cAdmP').value='';byId('cIgrU').value='';byId('cIgrP').value='';byId('cAdmU').placeholder='novo usuário admin';byId('cAdmP').placeholder='nova senha admin';byId('cIgrU').placeholder='novo usuário igreja';byId('cIgrP').placeholder='nova senha igreja';}
-  else{byId('cAdmU').value=auth.admin.user;byId('cAdmP').value=auth.admin.pass;byId('cIgrU').value=auth.igreja.user;byId('cIgrP').value=auth.igreja.pass;}
+  const us=(auth&&auth.users)||[];
+  if(CONNECTED){byId('cAdmU').value='';byId('cAdmP').value='';byId('cAdmU').placeholder='novo usuário admin';byId('cAdmP').placeholder='nova senha admin';setUserRow(1,null);setUserRow(2,null);setUserRow(3,null);}
+  else{byId('cAdmU').value=auth.admin.user;byId('cAdmP').value=auth.admin.pass;setUserRow(1,us[0]||(auth.igreja?{name:'',user:auth.igreja.user,pass:auth.igreja.pass}:null));setUserRow(2,us[1]||null);setUserRow(3,us[2]||null);}
   byId('iNm1').value=identity.nm1;byId('iNm2').value=identity.nm2;byId('iTag').value=identity.tag;byId('iVerse').value=identity.verse;byId('iRef').value=identity.ref;
   byId('iSheets').value=sheetsUrl;
   renderHistory();
 }
+function setUserRow(i,u){byId('u'+i+'n').value=u?(u.name||''):'';byId('u'+i+'u').value=u?(u.user||''):'';byId('u'+i+'p').value=u?(u.pass||''):'';byId('u'+i+'n').placeholder='nome';byId('u'+i+'u').placeholder='usuário';byId('u'+i+'p').placeholder='senha';}
 function saveCreds(){
-  const aU=byId('cAdmU').value.trim(),aP=byId('cAdmP').value,iU=byId('cIgrU').value.trim(),iP=byId('cIgrP').value;
-  if(!aU||!aP||!iU||!iP){toast('Preencha todos os campos de credenciais.');return;}
-  auth={admin:{user:aU,pass:aP},igreja:{user:iU,pass:iP}};
+  const aU=byId('cAdmU').value.trim(),aP=byId('cAdmP').value;
+  if(!aU||!aP){toast('Preencha usuário e senha do administrador.');return;}
+  const users=[];
+  for(let i=1;i<=3;i++){const n=byId('u'+i+'n').value.trim(),u=byId('u'+i+'u').value.trim(),p=byId('u'+i+'p').value;if(u&&p)users.push({name:n,user:u,pass:p});}
+  if(!users.length){toast('Defina ao menos um login da equipe (usuário e senha).');return;}
+  auth={admin:{user:aU,pass:aP},igreja:{user:users[0].user,pass:users[0].pass},users:users};
   if(CONNECTED){backendPost({action:'setConfig',key:'auth',value:auth});}else{safeSet(AK,auth);}
   if(session.role==='admin')session.user=aU;
-  logH('Configuração','Credenciais de acesso atualizadas');toast('Credenciais atualizadas');
+  logH('Configuração','Logins de acesso atualizados ('+users.length+' da equipe)');toast('Logins atualizados');
 }
 function downloadBackup(){
   const ts=new Date().toISOString().slice(0,10);
   const wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(people.map(p=>({Nº:p.n,Nome:p.nome,Telefone:p.tel,Email:p.email,Bairro:p.bairro,Nascimento:p.nasc,Situação:p.situacao,Grupo:p.grupo,Responsável:p.resp,Contatado:p.contatado?'Sim':'Não',DataContato:p.dataContato,Batismo:p.batismo?'Sim':'Não',Fase:p.fase,SituacaoContato:p.statusContato,Resposta:p.resposta,Obs:p.obs}))),'Pessoas');
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(people.map(p=>({Nº:p.n,Nome:p.nome,Telefone:p.tel,Email:p.email,Bairro:p.bairro,Nascimento:p.nasc,Situação:p.situacao,Grupo:p.grupo,Responsável:p.resp,Contatado:p.contatado?'Sim':'Não',DataContato:p.dataContato,Batismo:p.batismo?'Sim':'Não',Fase:p.fase,SituacaoContato:p.statusContato,Resposta:p.resposta,Camiseta:p.camiseta||'',Obs:p.obs}))),'Pessoas');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(groups.length?groups:[{}]),'Grupos');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(events.map(e=>({Nome:e.nome,Data:e.data,Tipo:e.tipo,Presentes:(e.presentes||[]).length,Obs:e.obs}))),'Eventos');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.json_to_sheet(history.length?history.map(h=>({Data:h.ts,Usuário:h.user,Ação:h.action,Detalhe:h.detail})):[{}]),'Histórico');
@@ -1094,7 +1113,7 @@ function downloadBackup(){
 function resetSeed(){if(!confirm('Restaurar a base inicial dos 285 contatos? Cadastros e edições feitos na plataforma serão substituídos. (Faça um backup antes.)'))return;seedData();scheduleSave();fillAllFilters();refreshActive();logH('Dados','Base inicial restaurada');toast('Base inicial restaurada');}
 function wipeAll(){if(!confirm('APAGAR TODAS as pessoas, grupos e eventos? Esta ação não pode ser desfeita.'))return;if(!confirm('Tem certeza absoluta? Recomendo baixar um backup antes.'))return;people=[];groups=[];events=[];scheduleSave();fillAllFilters();refreshActive();logH('Dados','Todos os dados foram apagados');toast('Todos os dados foram apagados');}
 
-function startApp(){applyIdentity();fillAllFilters();updateCounts();renderDash();go('dash');byId('roleTxt').textContent=(session.role==='admin'?'Administrador':'Igreja')+(CONNECTED?' · banco central':' · local');
+function startApp(){applyIdentity();fillAllFilters();updateCounts();renderDash();go('dash');document.body.classList.toggle('not-admin',session.role!=='admin');byId('roleTxt').textContent=(session.role==='admin'?'Administrador':'Gestão')+(CONNECTED?' · banco central':' · local');
   if(CONNECTED){setInterval(refreshFromServer,45000);window.addEventListener('focus',refreshFromServer);}}
 async function refreshFromServer(){
   if(!CONNECTED||!session.role)return;
