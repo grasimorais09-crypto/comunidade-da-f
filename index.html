@@ -727,7 +727,7 @@ async function backendPost(payload){try{payload.token=(session&&session.token)||
 
 let people=[],groups=[],events=[],history=[];
 let auth=JSON.parse(JSON.stringify(DEFAULT_AUTH)),identity=JSON.parse(JSON.stringify(DEFAULT_IDENTITY)),sheetsUrl='';
-let session={role:'',user:'',token:''};let lastLocalChange=0;
+let session={role:'',user:'',token:''};let lastLocalChange=0;let saving=false,dirty=false,importing=false;
 let charts={},current=null,saveTimer=null;
 let attEvent=null,attSet=new Set();
 
@@ -780,8 +780,8 @@ function seedData(){
   people=SEED.map(c=>({id:'p'+c.n,n:c.n,nome:c.nome,tel:c.tel||'',email:'',bairro:'',nasc:'',situacao:'Visitante',grupo:'',resp:c.vol||'',contatado:false,dataContato:'',batismo:true,fase:c.fase,statusContato:STATUS[0],resposta:mapResp(get('resposta')),wa:c.wa||null,origem:c.origem,motivo:c.motivo||null,obs:'',criadoEm:'',updated:''}));
 }
 async function persistKey(k,v){await safeSet(k,v);}
-function scheduleSave(){lastLocalChange=Date.now();setSync('saving','Salvando…');clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,CONNECTED?900:450);}
-async function saveNow(){try{if(CONNECTED){await backendPost({action:'saveAll',people:people,groups:groups,events:events,identity:identity});}else{await persistKey(PK,people);await persistKey(GK,groups);await persistKey(EK,events);await persistKey(HK,history);}setSync('','Sincronizado');}catch(e){setSync('err','Erro ao salvar');}}
+function scheduleSave(){lastLocalChange=Date.now();dirty=true;setSync('saving','Salvando…');clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,CONNECTED?900:450);}
+async function saveNow(){clearTimeout(saveTimer);if(saving)return;saving=true;dirty=false;try{if(CONNECTED){await backendPost({action:'saveAll',people:people,groups:groups,events:events,identity:identity});}else{await persistKey(PK,people);await persistKey(GK,groups);await persistKey(EK,events);await persistKey(HK,history);}setSync('','Sincronizado');}catch(e){dirty=true;setSync('err','Erro ao salvar');}finally{saving=false;lastLocalChange=Date.now();}if(dirty)scheduleSave();}
 function setSync(cls,txt){const s=byId('sync');s.className='sync'+(cls?' '+cls:'');byId('syncTxt').textContent=txt;}
 
 /* ---------- helpers ---------- */
@@ -1086,24 +1086,25 @@ function importRows(rows,asBatismo){
   scheduleSave();fillAllFilters();refreshActive();
   logH('Importação',add+' pessoa(s) importada(s)'+(skip?' · '+skip+' duplicadas ignoradas':''));toast(add+' pessoa(s) adicionada(s)'+(skip?' · '+skip+' já existiam':''));
 }
-function importXLSX(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}importRows(rows,true);}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
-function importDist(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}
+function importXLSX(ev){const f=ev.target.files[0];if(!f)return;importing=true;const rd=new FileReader();rd.onerror=()=>{importing=false;};rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}importRows(rows,true);}catch(err){toast('Erro ao ler: '+err.message);}finally{importing=false;ev.target.value='';}};rd.readAsArrayBuffer(f);}
+function importDist(ev){const f=ev.target.files[0];if(!f)return;importing=true;const rd=new FileReader();rd.onerror=()=>{importing=false;};rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}
 let upd=0,add=0,maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);const idx={};people.forEach(p=>{idx[dedupKey(p)]=p;});
 rows.forEach((r,i)=>{const get=k=>{const key=Object.keys(r).find(h=>h.toLowerCase().includes(k));return key?String(r[key]).trim():'';};const np=rowToPerson(get,maxN+1,i);if(!np)return;np.batismo=true;const vol=get('volunt')||get('respons');if(vol)np.resp=vol;const ex=idx[dedupKey(np)];if(ex){if(vol&&ex.resp!==vol){ex.resp=vol;ex.updated=nowStr();upd++;}}else{maxN++;np.n=maxN;if(!np.fase)np.fase='Intenção Batismo';people.push(np);idx[dedupKey(np)]=np;add++;}});
-scheduleSave();fillAllFilters();refreshActive();updateCounts();logH('Distribuição',add+' candidato(s) adicionado(s) · '+upd+' voluntário(s) atualizado(s)');toast('Distribuição: '+add+' novo(s), '+upd+' atualizado(s)');}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
+scheduleSave();fillAllFilters();refreshActive();updateCounts();logH('Distribuição',add+' candidato(s) adicionado(s) · '+upd+' voluntário(s) atualizado(s)');toast('Distribuição: '+add+' novo(s), '+upd+' atualizado(s)');}catch(err){toast('Erro ao ler: '+err.message);}finally{importing=false;ev.target.value='';}};rd.readAsArrayBuffer(f);}
 async function syncForm(){
   const url=byId('formUrl').value.trim();if(!url){byId('formUrl').focus();toast('Cole o link CSV do formulário.');return;}
   await safeSet(FK,url);
   toast('Buscando respostas do formulário…');
+  importing=true;
   try{
     const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);
     const text=await res.text();
     const rows=parseCSV(text);
     if(!rows.length){toast('Nenhuma resposta encontrada na planilha.');return;}
-    importRows(rows);
+    importRows(rows,true);
   }catch(err){
     toast('Não consegui acessar o link automaticamente. Baixe as respostas em .xlsx e use "Carregar tabela".');
-  }
+  }finally{importing=false;}
 }
 
 /* ====================== util ====================== */
@@ -1220,7 +1221,8 @@ function startApp(){applyIdentity();fillAllFilters();updateCounts();renderDash()
 async function refreshFromServer(){
   if(!CONNECTED||!session.role)return;
   if(byId('overlay').classList.contains('open')||byId('modalOv').classList.contains('open')||byId('attOv').classList.contains('open'))return;
-  if(Date.now()-lastLocalChange<12000)return;
+  if(importing||saving||dirty)return;
+  if(Date.now()-lastLocalChange<15000)return;
   try{const d=await jsonp({action:'load',token:(session&&session.token)||''});if(d&&d.ok){people=d.people||people;groups=d.groups||groups;events=d.events||events;history=d.history||history;if(d.identity){identity=d.identity;applyIdentity();}fillAllFilters();refreshActive();}}catch(e){}
 }
 (async function init(){
