@@ -551,8 +551,9 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
 
     <section class="view" id="view-estoque">
       <div class="vhead">
-        <div><div class="eyebrow">Logística</div><h2>Estoque de camisetas</h2><p>Tamanhos informados no formulário de batismo. Quando o <b>contato é feito</b>, a camiseta entra como distribuída — assim você sabe quantas já foram entregues.</p></div>
+        <div><div class="eyebrow">Logística</div><h2>Estoque · camisetas e toalhas</h2><p>Controle manual da gestão. Cadastre quanto há em estoque e registre cada entrega (camiseta e/ou toalha) — o sistema calcula distribuídas e saldo.</p></div>
         <div class="vactions">
+          <button class="btn btn-out" onclick="openEntrega()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Registrar entrega</button>
           <button class="btn btn-dark" onclick="exportEstoque()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Exportar Excel</button>
         </div>
       </div>
@@ -686,6 +687,20 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
       <div class="fld"><label>Observações</label><textarea id="eObs" placeholder="opcional"></textarea></div>
     </div>
     <div class="modal-foot"><button class="btn btn-ghost" onclick="closeEventModal()">Cancelar</button><button class="btn btn-dark" onclick="saveEvent()">Criar evento</button></div>
+  </div>
+</div>
+
+<!-- MODAL registrar entrega (estoque) -->
+<div class="modal-ov" id="entregaOv">
+  <div class="modal" style="width:460px">
+    <div class="modal-h"><button class="close" onclick="closeEntrega()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button><h3>Registrar entrega</h3><p>O que foi entregue para a pessoa (camiseta e/ou toalha).</p></div>
+    <div class="modal-body">
+      <div class="fld"><label>Para (nome)</label><input id="enPara" type="text" placeholder="opcional — quem recebeu" list="enPersonList"><datalist id="enPersonList"></datalist></div>
+      <div class="row2"><div class="fld"><label>Camiseta — tamanho</label><select id="enTam"><option value="">— nenhuma —</option><option>PP</option><option>P</option><option>M</option><option>G</option><option>GG</option><option>XG</option><option>EXG</option></select></div><div class="fld"><label>Qtd camiseta</label><input id="enQtdCam" type="number" min="1" value="1"></div></div>
+      <div class="fld"><label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="enToalha" style="width:auto"> Entregar toalha</label></div>
+      <div class="row2"><div class="fld"><label>Qtd toalha</label><input id="enQtdToa" type="number" min="1" value="1"></div><div class="fld"></div></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost" onclick="closeEntrega()">Cancelar</button><button class="btn btn-dark" onclick="registrarEntrega()">Registrar</button></div>
   </div>
 </div>
 
@@ -1074,18 +1089,34 @@ function exportVoluntarios(){const rows=bSet().slice().sort((a,b)=>(a.resp||'~')
 
 function estoqueData(){const sizes={};bSet().forEach(p=>{const sz=(p.camiseta||'').trim().toUpperCase();if(!sz)return;if(!sizes[sz])sizes[sz]={sol:0,dist:0};sizes[sz].sol++;if(p.contatado)sizes[sz].dist++;});return sizes;}
 function estoqueKeys(d){const order=['PP','P','M','G','GG','XG','EXG','XGG'];return Object.keys(d).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);});}
+const SIZES=['PP','P','M','G','GG','XG','EXG'];
+function getEstoque(){if(!identity.estoque)identity.estoque={camiseta:{},toalha:{e:0,d:0},log:[]};const eq=identity.estoque;if(!eq.camiseta)eq.camiseta={};SIZES.forEach(s=>{if(!eq.camiseta[s])eq.camiseta[s]={e:0,d:0};});if(!eq.toalha)eq.toalha={e:0,d:0};if(!Array.isArray(eq.log))eq.log=[];return eq;}
+function setEstoqueTotal(item,tam,val){const eq=getEstoque();const v=Math.max(0,parseInt(val,10)||0);if(item==='toalha')eq.toalha.e=v;else eq.camiseta[tam].e=v;scheduleSave();renderEstoque();}
+function openEntrega(){getEstoque();byId('enPara').value='';byId('enTam').value='';byId('enToalha').checked=false;byId('enQtdCam').value='1';byId('enQtdToa').value='1';byId('enPersonList').innerHTML=bSet().map(p=>`<option value="${esc(p.nome)}">`).join('');byId('entregaOv').classList.add('open');setTimeout(()=>byId('enPara').focus(),120);}
+function closeEntrega(){byId('entregaOv').classList.remove('open');}
+function registrarEntrega(){const eq=getEstoque();const para=byId('enPara').value.trim();const tam=byId('enTam').value;const qc=Math.max(1,parseInt(byId('enQtdCam').value,10)||1);const toa=byId('enToalha').checked;const qt=Math.max(1,parseInt(byId('enQtdToa').value,10)||1);if(!tam&&!toa){toast('Selecione camiseta e/ou toalha.');return;}const ts=nowStr();if(tam){eq.camiseta[tam].d=(eq.camiseta[tam].d||0)+qc;eq.log.unshift({ts,item:'Camiseta',tam,qtd:qc,para});}if(toa){eq.toalha.d=(eq.toalha.d||0)+qt;eq.log.unshift({ts,item:'Toalha',tam:'',qtd:qt,para});}if(eq.log.length>800)eq.log=eq.log.slice(0,800);scheduleSave();closeEntrega();renderEstoque();toast('Entrega registrada');logH('Estoque','Entrega'+(para?' p/ '+para:'')+(tam?' · camiseta '+tam+' x'+qc:'')+(toa?' · toalha x'+qt:''));}
+function delEntrega(i){const eq=getEstoque();const e=eq.log[i];if(!e)return;if(!confirm('Desfazer esta entrega?'))return;if(e.item==='Toalha'){eq.toalha.d=Math.max(0,(eq.toalha.d||0)-e.qtd);}else if(eq.camiseta[e.tam]){eq.camiseta[e.tam].d=Math.max(0,(eq.camiseta[e.tam].d||0)-e.qtd);}eq.log.splice(i,1);scheduleSave();renderEstoque();toast('Entrega desfeita');}
 function renderEstoque(){
-  const d=estoqueData(),keys=estoqueKeys(d);let tSol=0,tDist=0;keys.forEach(k=>{tSol+=d[k].sol;tDist+=d[k].dist;});
-  byId('eqKpis').innerHTML=[{l:'Camisetas solicitadas',v:tSol,m:'candidatos com tamanho'},{l:'Distribuídas',v:tDist,m:'contato feito = sim',feat:true},{l:'A distribuir',v:tSol-tDist,m:'ainda não entregues'}].map(kpiHTML).join('');
-  byId('eqBody').innerHTML=keys.length?'<div class="tablecard"><table><thead><tr><th>Tamanho</th><th>Solicitadas</th><th>Distribuídas</th><th>A distribuir</th></tr></thead><tbody>'+keys.map(k=>'<tr><td class="c-name">'+esc(k)+'</td><td>'+d[k].sol+'</td><td>'+d[k].dist+'</td><td>'+(d[k].sol-d[k].dist)+'</td></tr>').join('')+'<tr style="font-weight:700;background:var(--light)"><td>Total</td><td>'+tSol+'</td><td>'+tDist+'</td><td>'+(tSol-tDist)+'</td></tr></tbody></table></div>':'<div class="mini-empty">Sem dados de camiseta ainda. Eles entram pelo formulário de batismo (campo "tamanho de camiseta") ou pela importação da base.</div>';
+  const eq=getEstoque();const ist='width:84px;border:1px solid var(--border);border-radius:8px;padding:7px 9px;font-family:inherit;font-size:14px';
+  let cE=0,cD=0;SIZES.forEach(s=>{cE+=eq.camiseta[s].e;cD+=eq.camiseta[s].d;});const tE=eq.toalha.e,tD=eq.toalha.d;
+  byId('eqKpis').innerHTML=[{l:'Camisetas em estoque',v:cE,m:'cadastradas pela gestão'},{l:'Camisetas distribuídas',v:cD,m:'entregues',feat:true},{l:'Camisetas · saldo',v:cE-cD,m:'disponíveis'},{l:'Toalhas em estoque',v:tE,m:'cadastradas pela gestão'},{l:'Toalhas distribuídas',v:tD,m:'entregues',feat:true},{l:'Toalhas · saldo',v:tE-tD,m:'disponíveis'}].map(kpiHTML).join('');
+  const camRows=SIZES.map(s=>{const r=eq.camiseta[s];return `<tr><td class="c-name">${s}</td><td><input type="number" min="0" value="${r.e}" onchange="setEstoqueTotal('camiseta','${s}',this.value)" style="${ist}"></td><td>${r.d}</td><td style="font-weight:600">${r.e-r.d}</td></tr>`;}).join('');
+  const logRows=eq.log.slice(0,40).map((e,i)=>`<tr><td style="white-space:nowrap">${esc(e.ts)}</td><td>${esc(e.item)}${e.tam?' '+esc(e.tam):''}</td><td>${e.qtd}</td><td>${esc(e.para||'—')}</td><td><button class="iconbtn del-row" onclick="delEntrega(${i})" title="Desfazer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg></button></td></tr>`).join('');
+  byId('eqBody').innerHTML=`
+  <div class="tablecard" style="margin-bottom:16px"><div style="padding:13px 16px;font-weight:700;border-bottom:1px solid var(--border)">Camisetas por tamanho</div>
+  <table><thead><tr><th>Tamanho</th><th>Em estoque</th><th>Distribuídas</th><th>Saldo</th></tr></thead><tbody>${camRows}<tr style="font-weight:700;background:var(--light)"><td>Total</td><td>${cE}</td><td>${cD}</td><td>${cE-cD}</td></tr></tbody></table></div>
+  <div class="tablecard" style="margin-bottom:16px"><div style="padding:13px 16px;font-weight:700;border-bottom:1px solid var(--border)">Toalhas</div>
+  <table><thead><tr><th>Item</th><th>Em estoque</th><th>Distribuídas</th><th>Saldo</th></tr></thead><tbody><tr><td class="c-name">Toalha</td><td><input type="number" min="0" value="${tE}" onchange="setEstoqueTotal('toalha','',this.value)" style="${ist}"></td><td>${tD}</td><td style="font-weight:600">${tE-tD}</td></tr></tbody></table></div>
+  <div class="tablecard"><div style="padding:13px 16px;font-weight:700;border-bottom:1px solid var(--border)">Últimas entregas</div>
+  ${eq.log.length?`<table><thead><tr><th>Data</th><th>Item</th><th>Qtd</th><th>Para</th><th></th></tr></thead><tbody>${logRows}</tbody></table>`:'<div class="mini-empty">Nenhuma entrega registrada ainda. Use o botão "Registrar entrega".</div>'}</div>`;
 }
-function exportEstoque(){const d=estoqueData(),keys=estoqueKeys(d);const rows=keys.map(k=>({'Tamanho':k,'Solicitadas':d[k].sol,'Distribuídas (contato feito)':d[k].dist,'A distribuir':d[k].sol-d[k].dist}));if(!rows.length){toast('Sem dados de camiseta.');return;}dl(rows,'ComunidadeDaFe_Estoque_Camisetas');toast('Estoque exportado');}
+function exportEstoque(){const eq=getEstoque();const rows=SIZES.map(s=>({'Item':'Camiseta','Tamanho':s,'Em estoque':eq.camiseta[s].e,'Distribuídas':eq.camiseta[s].d,'Saldo':eq.camiseta[s].e-eq.camiseta[s].d}));rows.push({'Item':'Toalha','Tamanho':'—','Em estoque':eq.toalha.e,'Distribuídas':eq.toalha.d,'Saldo':eq.toalha.e-eq.toalha.d});dl(rows,'ComunidadeDaFe_Estoque');toast('Estoque exportado');}
 
 function renderDashVolEstoque(){
   if(byId('dashVol')){const vols=volList();const byVol=vols.map(v=>({v,n:bSet().filter(p=>p.resp===v).length})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);const sem=bSet().filter(p=>!p.resp).length;
     byId('dashVol').innerHTML=(byVol.length?byVol.map(x=>'<div class="bday" onclick="go(\'voluntarios\')" style="cursor:pointer"><div class="nm">'+esc(x.v)+'<small>'+x.n+' candidato(s)</small></div></div>').join(''):'<div class="mini-empty">Sem distribuição ainda.</div>')+(sem?'<div class="bday" onclick="go(\'voluntarios\')" style="cursor:pointer"><div class="nm">Sem voluntário<small>'+sem+' candidato(s)</small></div></div>':'');}
-  if(byId('dashEstoque')){const d=estoqueData(),keys=estoqueKeys(d);let tSol=0,tDist=0;keys.forEach(k=>{tSol+=d[k].sol;tDist+=d[k].dist;});
-    byId('dashEstoque').innerHTML='<div class="bday" onclick="go(\'estoque\')" style="cursor:pointer"><div class="nm">Total de camisetas<small>'+tDist+' distribuídas de '+tSol+' solicitadas</small></div></div>'+(keys.length?keys.map(k=>'<div class="bday"><div class="nm">'+esc(k)+'<small>'+d[k].dist+' distribuída(s) · '+d[k].sol+' solicitada(s)</small></div></div>').join(''):'<div class="mini-empty">Sem dados de camiseta.</div>');}
+  if(byId('dashEstoque')){const eq=getEstoque();let cE=0,cD=0;SIZES.forEach(s=>{cE+=eq.camiseta[s].e;cD+=eq.camiseta[s].d;});const tE=eq.toalha.e,tD=eq.toalha.d;
+    byId('dashEstoque').innerHTML=`<div class="bday" onclick="go('estoque')" style="cursor:pointer"><div class="nm">Camisetas<small>${cD} distribuídas · ${cE-cD} em saldo (de ${cE})</small></div></div><div class="bday" onclick="go('estoque')" style="cursor:pointer"><div class="nm">Toalhas<small>${tD} distribuídas · ${tE-tD} em saldo (de ${tE})</small></div></div>`;}
 }
 
 function toISODate(s){s=(s||'').trim();if(!s)return '';let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+String(m[2]).padStart(2,'0')+'-'+String(m[3]).padStart(2,'0');m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y=(+y>30?'19':'20')+y;if(+mo>12&&+d<=12){const t=d;d=mo;mo=t;}return y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0');}return '';}
@@ -1163,7 +1194,7 @@ function applyIdentity(){
   const brand=document.querySelector('.sb-brand .nm'); if(brand)brand.innerHTML=esc(i.nm1)+'<br>'+esc(i.nm2);
   const tag=document.querySelector('.sb-brand .tg'); if(tag)tag.textContent=i.tag;
 }
-function saveIdentity(){identity={nm1:byId('iNm1').value.trim()||'Comunidade',nm2:byId('iNm2').value.trim()||'da Fé',tag:byId('iTag').value.trim()||'Church',eyebrow:identity.eyebrow,verse:byId('iVerse').value.trim()||DEFAULT_IDENTITY.verse,ref:byId('iRef').value.trim()||'João 3.16'};if(CONNECTED){backendPost({action:'setConfig',key:'identity',value:identity});}else{safeSet(IK,identity);}applyIdentity();logH('Configuração','Identidade da igreja atualizada');toast('Identidade atualizada');}
+function saveIdentity(){identity=Object.assign({},identity,{nm1:byId('iNm1').value.trim()||'Comunidade',nm2:byId('iNm2').value.trim()||'da Fé',tag:byId('iTag').value.trim()||'Church',verse:byId('iVerse').value.trim()||DEFAULT_IDENTITY.verse,ref:byId('iRef').value.trim()||'João 3.16'});if(CONNECTED){backendPost({action:'setConfig',key:'identity',value:identity});}else{safeSet(IK,identity);}applyIdentity();logH('Configuração','Identidade da igreja atualizada');toast('Identidade atualizada');}
 
 /* ====================== LOGIN / LOGOUT ====================== */
 function saveSession(){try{localStorage.setItem('cf_sess',JSON.stringify({role:session.role,user:session.user,token:session.token||''}));}catch(e){}}
