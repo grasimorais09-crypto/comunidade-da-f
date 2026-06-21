@@ -357,6 +357,8 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
       <button class="navitem active" data-v="dash" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h8V3H3zM13 21h8V8h-8zM13 3v3h8V3zM3 17h8v4H3z"/></svg>Visão geral</button>
       <button class="navitem" data-v="membros" style="display:none" onclick="go('membros')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Pessoas <span class="cnt" id="cntMembros">0</span></button>
       <button class="navitem" data-v="batismo" onclick="go('batismo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C12 2.5 6 9 6 14a6 6 0 0 0 12 0c0-5-6-11.5-6-11.5Z"/></svg>Batismo <span class="cnt" id="cntBatismo">0</span></button>
+      <button class="navitem" data-v="voluntarios" onclick="go('voluntarios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Voluntários <span class="cnt" id="cntVoluntarios">0</span></button>
+      <button class="navitem" data-v="estoque" onclick="go('estoque')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23Z"/></svg>Estoque <span class="cnt" id="cntEstoque">0</span></button>
       <button class="navitem" data-v="grupos" style="display:none" onclick="go('grupos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><circle cx="5.5" cy="16" r="2.6"/><circle cx="18.5" cy="16" r="2.6"/><path d="M12 11.5v3M9.5 13.5 7 15M14.5 13.5 17 15"/></svg>Grupos <span class="cnt" id="cntGrupos">0</span></button>
       <button class="navitem" data-v="eventos" style="display:none" onclick="go('eventos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>Eventos <span class="cnt" id="cntEventos">0</span></button>
       <button class="navitem" data-v="contatos" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>Contatos <span class="cnt" id="cntContatos">0</span></button>
@@ -401,6 +403,10 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
         <div class="dashrow">
           <div class="card"><div class="card-h"><h3>Aniversariantes do mês</h3><span class="eyebrow" id="bdayMonth"></span></div><div class="bday-list" id="bdayList"></div></div>
           <div class="card"><div class="card-h"><h3>Próximos eventos</h3><span class="eyebrow">agenda</span></div><div class="bday-list" id="nextEvents"></div></div>
+        </div>
+        <div class="dashrow">
+          <div class="card"><div class="card-h"><h3>Distribuição por voluntário</h3><span class="eyebrow">batismo</span></div><div class="bday-list" id="dashVol"></div></div>
+          <div class="card"><div class="card-h"><h3>Camisetas</h3><span class="eyebrow">estoque</span></div><div class="bday-list" id="dashEstoque"></div></div>
         </div>
       </div>
     </section>
@@ -517,6 +523,43 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
       </div>
     </section>
     <!-- ADMINISTRAÇÃO -->
+    <section class="view" id="view-voluntarios">
+      <div class="vhead">
+        <div><div class="eyebrow">Acompanhamento</div><h2>Voluntários</h2><p>Distribuição dos candidatos por voluntário. Cada um acompanha sua lista e fala pelo WhatsApp com a mensagem base já pronta.</p></div>
+        <div class="vactions">
+          <button class="btn btn-out" onclick="document.getElementById('fileInputDist').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Importar distribuição</button>
+          <button class="btn btn-out" onclick="openForm(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Cadastrar candidato</button>
+          <button class="btn btn-dark" onclick="exportVoluntarios()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Exportar Excel</button>
+        </div>
+      </div>
+      <div class="viewbody">
+        <div class="card" style="margin-bottom:16px">
+          <div style="font-weight:600;font-size:13px;margin-bottom:7px">Mensagem base do WhatsApp <span style="color:var(--muted);font-weight:500">— use <b>[Nome]</b> para inserir o primeiro nome do candidato</span></div>
+          <textarea id="baseMsg" rows="2" style="width:100%;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;padding:11px 13px;font-family:inherit;font-size:13.5px;resize:vertical"></textarea>
+          <div style="margin-top:9px"><button class="btn btn-out btn-sm" onclick="saveBaseMsg()">Salvar mensagem</button></div>
+        </div>
+        <div class="kpis" id="vKpis" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div class="toolbar">
+          <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="vQ" type="text" placeholder="Buscar candidato…" oninput="renderVoluntarios()"></div>
+          <select class="filter" id="vFilt" onchange="renderVoluntarios()"></select>
+        </div>
+        <div id="vBody"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-estoque">
+      <div class="vhead">
+        <div><div class="eyebrow">Logística</div><h2>Estoque de camisetas</h2><p>Tamanhos informados no formulário de batismo. Quando o <b>contato é feito</b>, a camiseta entra como distribuída — assim você sabe quantas já foram entregues.</p></div>
+        <div class="vactions">
+          <button class="btn btn-dark" onclick="exportEstoque()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Exportar Excel</button>
+        </div>
+      </div>
+      <div class="viewbody">
+        <div class="kpis" id="eqKpis" style="grid-template-columns:repeat(3,1fr)"></div>
+        <div id="eqBody"></div>
+      </div>
+    </section>
+
     <section class="view" id="view-admin">
       <div class="vhead">
         <div><div class="eyebrow">Sistema</div><h2>Administração</h2><p>Controle de acesso, identidade, histórico e integração da plataforma. Visível apenas para o perfil administrador.</p></div>
@@ -584,6 +627,7 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
 </div>
 
 <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="importXLSX(event)">
+<input type="file" id="fileInputDist" accept=".xlsx,.xls,.csv" onchange="importDist(event)">
 <datalist id="grupoList"></datalist>
 
 <!-- PANEL pessoa -->
@@ -751,14 +795,14 @@ function sitClass(s){return 'sit-'+(s||'Visitante');}
 function groupNames(){const fromPeople=[...new Set(people.map(p=>p.grupo).filter(Boolean))];const fromList=groups.map(g=>g.nome);return [...new Set([...fromList,...fromPeople])].sort((a,b)=>a.localeCompare(b,'pt'));}
 
 /* ---------- navegação ---------- */
-const TITLES={dash:'Visão geral',membros:'Pessoas',batismo:'Batismo nas águas',grupos:'Grupos & células',eventos:'Eventos & presença',contatos:'Fila de contatos',admin:'Administração'};
+const TITLES={dash:'Visão geral',membros:'Pessoas',batismo:'Batismo nas águas',grupos:'Grupos & células',eventos:'Eventos & presença',voluntarios:'Voluntários',estoque:'Estoque de camisetas',contatos:'Fila de contatos',admin:'Administração'};
 function go(v){
   if(v==='admin'&&session.role!=='admin'){v='dash';}
   document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
   byId('view-'+v).classList.add('active');
   document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.v===v));
   byId('topTitle').textContent=TITLES[v];toggleSidebar(false);window.scrollTo(0,0);
-  ({dash:renderDash,membros:renderMembros,batismo:renderBatismo,grupos:renderGrupos,eventos:renderEventos,contatos:renderContatos,admin:renderAdmin}[v]||(()=>{}))();
+  ({dash:renderDash,membros:renderMembros,batismo:renderBatismo,grupos:renderGrupos,eventos:renderEventos,contatos:renderContatos,voluntarios:renderVoluntarios,estoque:renderEstoque,admin:renderAdmin}[v]||(()=>{}))();
 }
 function toggleSidebar(open){byId('sidebar').classList.toggle('open',open);byId('scrim').classList.toggle('open',open);}
 
@@ -778,7 +822,7 @@ function renderDash(){
   charts.d_1=new Chart(byId('chContato'),{type:'doughnut',data:{labels:['Contatados','A contatar'],datasets:[{data:[contatados,total-contatados],backgroundColor:['#15151A','#D6D6DC'],borderWidth:2,borderColor:'#fff'}]},options:baseOpts({cutout:'64%'})});
   charts.d_2=new Chart(byId('chSit'),{type:'bar',data:{labels:SITUACOES,datasets:[{data:SITUACOES.map(s=>people.filter(p=>p.situacao===s).length),backgroundColor:PAL,borderRadius:6,maxBarThickness:40}]},options:barOpts()});
   charts.d_3=new Chart(byId('chJornada'),{type:'doughnut',data:{labels:['Sem resposta','Quero me batizar','Já batizado','Não tem interesse'],datasets:[{data:RESP.map(r=>people.filter(p=>p.batismo&&p.resposta===r).length),backgroundColor:['#D6D6DC','#15151A','#63636D','#A6A6AE'],borderWidth:2,borderColor:'#fff'}]},options:baseOpts({cutout:'58%'})});
-  renderBirthdays();renderNextEvents();updateCounts();
+  renderBirthdays();renderNextEvents();renderDashVolEstoque();updateCounts();
 }
 function renderBirthdays(){
   const m=new Date().getMonth()+1;byId('bdayMonth').textContent=MESES[m-1].toUpperCase();
@@ -974,7 +1018,7 @@ function closeForm(){byId('modalOv').classList.remove('open');}
 function savePerson(){
   const nome=byId('fNome').value.trim();if(!nome){byId('fNome').focus();byId('fNome').style.borderColor='#C97A7A';return;}
   const tel=byId('fTel').value.trim(),maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);
-  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:byId('fCamiseta').value.trim(),obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
+  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:mapResp(get('resposta')),wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:byId('fCamiseta').value.trim(),obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
   scheduleSave();closeForm();fillAllFilters();refreshActive();logH('Cadastro','Nova pessoa: '+nome+(byId('fBat').classList.contains('on')?' (candidato batismo)':''));toast(nome.split(' ')[0]+' cadastrado(a) com sucesso');
 }
 
@@ -983,6 +1027,53 @@ function dl(wsData,nome){const ws=XLSX.utils.json_to_sheet(wsData);const wb=XLSX
 function exportPeople(){dl(people.map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'E-mail':p.email,'Bairro/Cidade':p.bairro,'Nascimento':p.nasc,'Situação':p.situacao,'Grupo':p.grupo,'Responsável':p.resp,'Contatado':p.contatado?'Sim':'Não','Data do contato':p.dataContato,'Candidato batismo':p.batismo?'Sim':'Não','Fase':p.batismo?p.fase:'','Situação contato':p.batismo?p.statusContato:'','Resposta':p.batismo?p.resposta:'','Tamanho camiseta':p.camiseta||'','Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Pessoas');toast('Planilha de pessoas exportada');}
 function exportBatismo(){dl(bSet().map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Fase':p.fase,'Voluntário':p.resp,'Situação contato':p.statusContato,'Resposta':p.resposta,'Tamanho camiseta':p.camiseta||'','Origem':p.origem,'Observações':p.obs,'WhatsApp':p.wa||''})),'ComunidadeDaFe_Batismo');toast('Planilha de batismo exportada');}
 function exportPending(){dl(people.filter(p=>!p.contatado).map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Situação':p.situacao,'Responsável':p.resp,'WhatsApp':p.wa||''})),'ComunidadeDaFe_AContatar');toast('Pendentes exportados');}
+
+/* ====================== VOLUNTÁRIOS & ESTOQUE (Fase 2) ====================== */
+const VOLS_DEFAULT=['João Alves','Arthur Bumussa','João Gabriel','Estevão Camargo','Guilherme Silva','Luana Gonçalves','Nathalia Camargo','Mateo Luigi'];
+const DEFAULT_MSG='Olá [Nome]! Paz. Sou do ministério do batismo e estou entrando em contato para acompanhar sua inscrição para o batismo nas águas.';
+function getBaseMsg(){try{return localStorage.getItem('cf_basemsg')||DEFAULT_MSG;}catch(e){return DEFAULT_MSG;}}
+function saveBaseMsg(){try{localStorage.setItem('cf_basemsg',byId('baseMsg').value);}catch(e){}toast('Mensagem base salva');renderVoluntarios();}
+function firstName(n){return (n||'').trim().split(/\s+/)[0]||'';}
+function waMsg(p){if(!p.wa)return null;return p.wa+'?text='+encodeURIComponent(getBaseMsg().replace(/\[Nome\]/g,firstName(p.nome)));}
+function volList(){const set=new Set(VOLS_DEFAULT);people.forEach(p=>{if(p.resp)set.add(p.resp);});return [...set].sort((a,b)=>a.localeCompare(b,'pt'));}
+function fillVolFilter(){if(!byId('vFilt'))return;const cur=byId('vFilt').value;setOpts('vFilt',[['','Todos os voluntários'],...volList().map(v=>[v,v]),['__sem','Sem voluntário']]);byId('vFilt').value=cur;}
+function assignVol(id,v){const p=people.find(x=>x.id===id);if(!p)return;p.resp=v;p.updated=nowStr();scheduleSave();fillAllFilters();renderVoluntarios();updateCounts();toast(v?('Atribuído a '+v):'Voluntário removido');}
+function renderVoluntarios(){
+  const bm=byId('baseMsg');if(bm&&document.activeElement!==bm)bm.value=getBaseMsg();
+  const q=(byId('vQ').value||'').trim().toLowerCase(),ff=byId('vFilt').value;
+  const all=bSet();
+  const comVol=all.filter(p=>p.resp).length, semVol=all.length-comVol, nVols=volList().length;
+  byId('vKpis').innerHTML=[{l:'Voluntários',v:nVols,m:'na equipe',feat:true},{l:'Com voluntário',v:comVol,m:'candidatos distribuídos'},{l:'Sem voluntário',v:semVol,m:'aguardando atribuição'}].map(kpiHTML).join('');
+  let cand=all.filter(p=>{if(q&&!(p.nome.toLowerCase().includes(q)||(p.tel||'').toLowerCase().includes(q)))return false;return true;});
+  const groups={},order=[];
+  cand.forEach(p=>{const k=p.resp||'__sem';if(!groups[k]){groups[k]=[];order.push(k);}groups[k].push(p);});
+  let keys=order;if(ff)keys=order.filter(k=>k===ff);
+  keys.sort((a,b)=>a==='__sem'?1:b==='__sem'?-1:a.localeCompare(b,'pt'));
+  const vols=volList();
+  byId('vBody').innerHTML=keys.length?keys.map(k=>{
+    const list=groups[k].sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
+    const title=k==='__sem'?'Sem voluntário':k;
+    return '<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:15px">'+esc(title)+'</b><span class="count-pill">'+list.length+' candidato(s)</span></div><div class="tablecard" style="box-shadow:none;border:none"><table><thead><tr><th>Candidato</th><th>Telefone</th><th>Voluntário</th><th>Contato</th><th></th></tr></thead><tbody>'+list.map(p=>'<tr><td class="c-name">'+esc(p.nome)+'</td><td style="color:var(--muted)">'+esc(p.tel||'—')+'</td><td><select class="filter" onchange="assignVol(\''+p.id+'\',this.value)"><option value="">— sem —</option>'+vols.map(v=>'<option value="'+esc(v)+'" '+((p.resp||'')===v?'selected':'')+'>'+esc(v)+'</option>').join('')+'</select></td><td>'+(p.contatado?'<span class="dot-yes"><span class="i"></span>Sim</span>':'<span class="dot-no"><span class="i"></span>Não</span>')+'</td><td>'+(waMsg(p)?'<a class="btn btn-out btn-sm" href="'+waMsg(p)+'" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>':'<span style="color:var(--muted);font-size:12px">sem nº</span>')+'</td></tr>').join('')+'</tbody></table></div></div>';
+  }).join(''):'<div class="mini-empty">Nenhum candidato encontrado. Importe a distribuição ou cadastre candidatos.</div>';
+}
+function exportVoluntarios(){const rows=bSet().slice().sort((a,b)=>(a.resp||'~').localeCompare(b.resp||'~','pt')||a.nome.localeCompare(b.nome,'pt')).map(p=>({'Voluntário':p.resp||'','Nome':p.nome,'Telefone':p.tel||'','WhatsApp':p.wa||'','Contato feito':p.contatado?'Sim':'Não','Tamanho camiseta':p.camiseta||'','Mensagem base':getBaseMsg().replace(/\[Nome\]/g,firstName(p.nome))}));if(!rows.length){toast('Nada para exportar.');return;}dl(rows,'ComunidadeDaFe_Voluntarios');toast('Distribuição exportada');}
+
+function estoqueData(){const sizes={};bSet().forEach(p=>{const sz=(p.camiseta||'').trim().toUpperCase();if(!sz)return;if(!sizes[sz])sizes[sz]={sol:0,dist:0};sizes[sz].sol++;if(p.contatado)sizes[sz].dist++;});return sizes;}
+function estoqueKeys(d){const order=['PP','P','M','G','GG','XG','EXG','XGG'];return Object.keys(d).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);});}
+function renderEstoque(){
+  const d=estoqueData(),keys=estoqueKeys(d);let tSol=0,tDist=0;keys.forEach(k=>{tSol+=d[k].sol;tDist+=d[k].dist;});
+  byId('eqKpis').innerHTML=[{l:'Camisetas solicitadas',v:tSol,m:'candidatos com tamanho'},{l:'Distribuídas',v:tDist,m:'contato feito = sim',feat:true},{l:'A distribuir',v:tSol-tDist,m:'ainda não entregues'}].map(kpiHTML).join('');
+  byId('eqBody').innerHTML=keys.length?'<div class="tablecard"><table><thead><tr><th>Tamanho</th><th>Solicitadas</th><th>Distribuídas</th><th>A distribuir</th></tr></thead><tbody>'+keys.map(k=>'<tr><td class="c-name">'+esc(k)+'</td><td>'+d[k].sol+'</td><td>'+d[k].dist+'</td><td>'+(d[k].sol-d[k].dist)+'</td></tr>').join('')+'<tr style="font-weight:700;background:var(--light)"><td>Total</td><td>'+tSol+'</td><td>'+tDist+'</td><td>'+(tSol-tDist)+'</td></tr></tbody></table></div>':'<div class="mini-empty">Sem dados de camiseta ainda. Eles entram pelo formulário de batismo (campo "tamanho de camiseta") ou pela importação da base.</div>';
+}
+function exportEstoque(){const d=estoqueData(),keys=estoqueKeys(d);const rows=keys.map(k=>({'Tamanho':k,'Solicitadas':d[k].sol,'Distribuídas (contato feito)':d[k].dist,'A distribuir':d[k].sol-d[k].dist}));if(!rows.length){toast('Sem dados de camiseta.');return;}dl(rows,'ComunidadeDaFe_Estoque_Camisetas');toast('Estoque exportado');}
+
+function renderDashVolEstoque(){
+  if(byId('dashVol')){const vols=volList();const byVol=vols.map(v=>({v,n:bSet().filter(p=>p.resp===v).length})).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);const sem=bSet().filter(p=>!p.resp).length;
+    byId('dashVol').innerHTML=(byVol.length?byVol.map(x=>'<div class="bday" onclick="go(\'voluntarios\')" style="cursor:pointer"><div class="nm">'+esc(x.v)+'<small>'+x.n+' candidato(s)</small></div></div>').join(''):'<div class="mini-empty">Sem distribuição ainda.</div>')+(sem?'<div class="bday" onclick="go(\'voluntarios\')" style="cursor:pointer"><div class="nm">Sem voluntário<small>'+sem+' candidato(s)</small></div></div>':'');}
+  if(byId('dashEstoque')){const d=estoqueData(),keys=estoqueKeys(d);let tSol=0,tDist=0;keys.forEach(k=>{tSol+=d[k].sol;tDist+=d[k].dist;});
+    byId('dashEstoque').innerHTML='<div class="bday" onclick="go(\'estoque\')" style="cursor:pointer"><div class="nm">Total de camisetas<small>'+tDist+' distribuídas de '+tSol+' solicitadas</small></div></div>'+(keys.length?keys.map(k=>'<div class="bday"><div class="nm">'+esc(k)+'<small>'+d[k].dist+' distribuída(s) · '+d[k].sol+' solicitada(s)</small></div></div>').join(''):'<div class="mini-empty">Sem dados de camiseta.</div>');}
+}
+
 function toISODate(s){s=(s||'').trim();if(!s)return '';let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+String(m[2]).padStart(2,'0')+'-'+String(m[3]).padStart(2,'0');m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y=(+y>30?'19':'20')+y;if(+mo>12&&+d<=12){const t=d;d=mo;mo=t;}return y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0');}return '';}
 function parseCSV(text){const lines=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===','){row.push(cur);cur='';}else if(c==='\n'){row.push(cur);lines.push(row);row=[];cur='';}else if(c==='\r'){}else cur+=c;}}if(cur!==''||row.length){row.push(cur);lines.push(row);}if(!lines.length)return [];const head=lines[0].map(h=>h.trim());return lines.slice(1).filter(r=>r.some(x=>(x||'').trim()!=='')).map(r=>{const o={};head.forEach((h,i)=>o[h]=(r[i]||'').trim());return o;});}
 function mapFase(s){s=(s||'').toLowerCase();const d=s.includes('decis'),i=s.includes('inten');if(d&&i)return 'Decisão + Intenção';if(i)return 'Intenção Batismo';if(d)return 'Decisão';return '';}
@@ -996,6 +1087,10 @@ function importRows(rows,asBatismo){
   logH('Importação',add+' pessoa(s) importada(s)'+(skip?' · '+skip+' duplicadas ignoradas':''));toast(add+' pessoa(s) adicionada(s)'+(skip?' · '+skip+' já existiam':''));
 }
 function importXLSX(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}importRows(rows,true);}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
+function importDist(ev){const f=ev.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array'});const sh=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sh,{defval:''});if(!rows.length){toast('Planilha vazia.');return;}
+let upd=0,add=0,maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);const idx={};people.forEach(p=>{idx[dedupKey(p)]=p;});
+rows.forEach((r,i)=>{const get=k=>{const key=Object.keys(r).find(h=>h.toLowerCase().includes(k));return key?String(r[key]).trim():'';};const np=rowToPerson(get,maxN+1,i);if(!np)return;np.batismo=true;const vol=get('volunt')||get('respons');if(vol)np.resp=vol;const ex=idx[dedupKey(np)];if(ex){if(vol&&ex.resp!==vol){ex.resp=vol;ex.updated=nowStr();upd++;}}else{maxN++;np.n=maxN;if(!np.fase)np.fase='Intenção Batismo';people.push(np);idx[dedupKey(np)]=np;add++;}});
+scheduleSave();fillAllFilters();refreshActive();updateCounts();logH('Distribuição',add+' candidato(s) adicionado(s) · '+upd+' voluntário(s) atualizado(s)');toast('Distribuição: '+add+' novo(s), '+upd+' atualizado(s)');}catch(err){toast('Erro ao ler: '+err.message);}ev.target.value='';};rd.readAsArrayBuffer(f);}
 async function syncForm(){
   const url=byId('formUrl').value.trim();if(!url){byId('formUrl').focus();toast('Cole o link CSV do formulário.');return;}
   await safeSet(FK,url);
@@ -1012,9 +1107,9 @@ async function syncForm(){
 }
 
 /* ====================== util ====================== */
-function updateCounts(){byId('cntMembros').textContent=people.length;byId('cntBatismo').textContent=bSet().length;byId('cntGrupos').textContent=groupNames().length;byId('cntEventos').textContent=events.length;byId('cntContatos').textContent=people.filter(p=>!p.contatado).length;}
-function refreshActive(){const el=document.querySelector('.view.active');if(!el)return;const v=el.id.replace('view-','');({dash:renderDash,membros:renderMembros,batismo:renderBatismo,grupos:renderGrupos,eventos:renderEventos,contatos:renderContatos}[v]||(()=>{}))();updateCounts();}
-function fillAllFilters(){fillMembrosFilters();fillBatismoFilters();fillContatosFilters();fillEventTipos();}
+function updateCounts(){byId('cntMembros').textContent=people.length;byId('cntBatismo').textContent=bSet().length;byId('cntGrupos').textContent=groupNames().length;byId('cntEventos').textContent=events.length;byId('cntContatos').textContent=people.filter(p=>!p.contatado).length;if(byId('cntVoluntarios'))byId('cntVoluntarios').textContent=volList().length;if(byId('cntEstoque')){const d=estoqueData();let t=0;Object.keys(d).forEach(k=>t+=d[k].dist);byId('cntEstoque').textContent=t;}}
+function refreshActive(){const el=document.querySelector('.view.active');if(!el)return;const v=el.id.replace('view-','');({dash:renderDash,membros:renderMembros,batismo:renderBatismo,grupos:renderGrupos,eventos:renderEventos,contatos:renderContatos,voluntarios:renderVoluntarios,estoque:renderEstoque}[v]||(()=>{}))();updateCounts();}
+function fillAllFilters(){fillMembrosFilters();fillBatismoFilters();fillContatosFilters();fillEventTipos();fillVolFilter();}
 let toastT=null;function toast(m){const t=byId('toast');byId('toastTxt').textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),3200);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeForm();closeGroupModal();closeEventModal();closeAtt();}});
 
