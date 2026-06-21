@@ -236,7 +236,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
 .wa-cta{flex:1;background:var(--wa);color:#fff;justify-content:center}.wa-cta:hover{background:#1FB857}
 .wa-cta.off{background:#EDEDF0;color:var(--muted-2);pointer-events:none}
 .del-btn{background:#fff;color:var(--rose);box-shadow:inset 0 0 0 1px #E8CFCF}.del-btn:hover{background:#FBF1F1}
-body.not-admin .del-row,body.not-admin .del-btn{display:none!important}
+body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{display:none!important}
 
 .modal-ov{position:fixed;inset:0;background:rgba(11,11,14,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:.2s;z-index:60;display:grid;place-items:center;padding:20px}
 .modal-ov.open{opacity:1;pointer-events:auto}
@@ -435,6 +435,7 @@ body.not-admin .del-row,body.not-admin .del-btn{display:none!important}
       <div class="vhead">
         <div><div class="eyebrow">Discipulado</div><h2>Batismo nas águas</h2><p>Acompanhe quem declarou decisão ou intenção de batismo. Registre o contato dos voluntários e a resposta de cada pessoa.</p></div>
         <div class="vactions">
+          <button class="btn del-btn admin-only" onclick="clearBatismo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/></svg>Excluir candidatos</button>
           <button class="btn btn-out" onclick="openForm(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Cadastrar candidato</button>
           <button class="btn btn-dark" onclick="exportBatismo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Exportar Excel</button>
         </div>
@@ -822,6 +823,7 @@ function removePerson(id){if(session.role!=='admin'){toast('Apenas o administrad
 
 /* ====================== BATISMO ====================== */
 function bSet(){return people.filter(p=>p.batismo);}
+function clearBatismo(){if(session.role!=='admin'){toast('Apenas o administrador pode excluir.');return;}const set=bSet();if(!set.length){toast('Não há candidatos a batismo.');return;}if(!confirm('Excluir TODOS os '+set.length+' candidatos a batismo da plataforma? Esta ação não pode ser desfeita.'))return;const ids=new Set(set.map(p=>p.id));people=people.filter(p=>!ids.has(p.id));if(current&&ids.has(current.id))closePanel();scheduleSave();logH('Exclusão em massa',set.length+' candidatos a batismo removidos');fillAllFilters();refreshActive();toast(set.length+' candidato(s) removido(s)');}
 function fillBatismoFilters(){
   const vols=[...new Set(bSet().map(p=>p.resp).filter(Boolean))].sort();
   setOpts('bVol',[['','Todos os voluntários'],...vols.map(v=>[v,v])]);
