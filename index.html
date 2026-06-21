@@ -355,10 +355,10 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
     <nav class="sb-nav">
       <div class="sb-sec">Gestão</div>
       <button class="navitem active" data-v="dash" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h8V3H3zM13 21h8V8h-8zM13 3v3h8V3zM3 17h8v4H3z"/></svg>Visão geral</button>
-      <button class="navitem" data-v="membros" onclick="go('membros')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Pessoas <span class="cnt" id="cntMembros">0</span></button>
+      <button class="navitem" data-v="membros" style="display:none" onclick="go('membros')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Pessoas <span class="cnt" id="cntMembros">0</span></button>
       <button class="navitem" data-v="batismo" onclick="go('batismo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C12 2.5 6 9 6 14a6 6 0 0 0 12 0c0-5-6-11.5-6-11.5Z"/></svg>Batismo <span class="cnt" id="cntBatismo">0</span></button>
-      <button class="navitem" data-v="grupos" onclick="go('grupos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><circle cx="5.5" cy="16" r="2.6"/><circle cx="18.5" cy="16" r="2.6"/><path d="M12 11.5v3M9.5 13.5 7 15M14.5 13.5 17 15"/></svg>Grupos <span class="cnt" id="cntGrupos">0</span></button>
-      <button class="navitem" data-v="eventos" onclick="go('eventos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>Eventos <span class="cnt" id="cntEventos">0</span></button>
+      <button class="navitem" data-v="grupos" style="display:none" onclick="go('grupos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><circle cx="5.5" cy="16" r="2.6"/><circle cx="18.5" cy="16" r="2.6"/><path d="M12 11.5v3M9.5 13.5 7 15M14.5 13.5 17 15"/></svg>Grupos <span class="cnt" id="cntGrupos">0</span></button>
+      <button class="navitem" data-v="eventos" style="display:none" onclick="go('eventos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>Eventos <span class="cnt" id="cntEventos">0</span></button>
       <button class="navitem" data-v="contatos" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>Contatos <span class="cnt" id="cntContatos">0</span></button>
       <div class="sb-sec" id="secSistema">Sistema</div>
       <button class="navitem" id="nav-admin" data-v="admin" onclick="go('admin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>Administração</button>
@@ -436,6 +436,7 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
         <div><div class="eyebrow">Discipulado</div><h2>Batismo nas águas</h2><p>Acompanhe quem declarou decisão ou intenção de batismo. Registre o contato dos voluntários e a resposta de cada pessoa.</p></div>
         <div class="vactions">
           <button class="btn del-btn admin-only" onclick="clearBatismo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/></svg>Excluir candidatos</button>
+          <button class="btn btn-out" onclick="document.getElementById('fileInput').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>Importar base</button>
           <button class="btn btn-out" onclick="openForm(true)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Cadastrar candidato</button>
           <button class="btn btn-dark" onclick="exportBatismo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg>Exportar Excel</button>
         </div>
@@ -682,7 +683,7 @@ async function backendPost(payload){try{payload.token=(session&&session.token)||
 
 let people=[],groups=[],events=[],history=[];
 let auth=JSON.parse(JSON.stringify(DEFAULT_AUTH)),identity=JSON.parse(JSON.stringify(DEFAULT_IDENTITY)),sheetsUrl='';
-let session={role:'',user:''};
+let session={role:'',user:'',token:''};let lastLocalChange=0;
 let charts={},current=null,saveTimer=null;
 let attEvent=null,attSet=new Set();
 
@@ -702,17 +703,19 @@ async function getKey(k){const v=await _get(k);if(v==null)return null;try{return
 async function safeSet(k,v){await _set(k,typeof v==='string'?v:JSON.stringify(v));}
 async function loadData(){
   if(CONNECTED){
-    try{
-      const d=await jsonp({action:'load',token:(session&&session.token)||''});
-      if(!d||!d.ok)throw new Error((d&&d.error)||'resposta inválida');
+    let d=null;
+    try{d=await jsonp({action:'load',token:(session&&session.token)||''});}
+    catch(e){CONNECTED=false;setTimeout(()=>toast('Sem conexão com o servidor — usando dados locais deste navegador.'),900);await loadLocal();return false;}
+    if(d&&d.ok){
       people=d.people||[];groups=d.groups||[];events=d.events||[];history=d.history||[];
       identity=d.identity||JSON.parse(JSON.stringify(DEFAULT_IDENTITY));
       if((!people||!people.length)&&!d.seeded&&SEED&&SEED.length){seedData();backendPost({action:'seed',people});backendPost({action:'setConfig',key:'seeded',value:true});}
       if(!identity)identity=JSON.parse(JSON.stringify(DEFAULT_IDENTITY));
-      return;
-    }catch(e){CONNECTED=false;setTimeout(()=>toast('Sem conexão com o servidor — usando dados locais deste navegador.'),900);}
+      return true;
+    }
+    return false;
   }
-  await loadLocal();
+  await loadLocal();return false;
 }
 async function loadLocal(){
   try{
@@ -730,10 +733,10 @@ async function loadLocal(){
   if(!identity)identity=JSON.parse(JSON.stringify(DEFAULT_IDENTITY));
 }
 function seedData(){
-  people=SEED.map(c=>({id:'p'+c.n,n:c.n,nome:c.nome,tel:c.tel||'',email:'',bairro:'',nasc:'',situacao:'Visitante',grupo:'',resp:c.vol||'',contatado:false,dataContato:'',batismo:true,fase:c.fase,statusContato:STATUS[0],resposta:RESP[0],wa:c.wa||null,origem:c.origem,motivo:c.motivo||null,obs:'',criadoEm:'',updated:''}));
+  people=SEED.map(c=>({id:'p'+c.n,n:c.n,nome:c.nome,tel:c.tel||'',email:'',bairro:'',nasc:'',situacao:'Visitante',grupo:'',resp:c.vol||'',contatado:false,dataContato:'',batismo:true,fase:c.fase,statusContato:STATUS[0],resposta:mapResp(get('resposta')),wa:c.wa||null,origem:c.origem,motivo:c.motivo||null,obs:'',criadoEm:'',updated:''}));
 }
 async function persistKey(k,v){await safeSet(k,v);}
-function scheduleSave(){setSync('saving','Salvando…');clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,CONNECTED?900:450);}
+function scheduleSave(){lastLocalChange=Date.now();setSync('saving','Salvando…');clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,CONNECTED?900:450);}
 async function saveNow(){try{if(CONNECTED){await backendPost({action:'saveAll',people:people,groups:groups,events:events,identity:identity});}else{await persistKey(PK,people);await persistKey(GK,groups);await persistKey(EK,events);await persistKey(HK,history);}setSync('','Sincronizado');}catch(e){setSync('err','Erro ao salvar');}}
 function setSync(cls,txt){const s=byId('sync');s.className='sync'+(cls?' '+cls:'');byId('syncTxt').textContent=txt;}
 
@@ -982,7 +985,9 @@ function exportBatismo(){dl(bSet().map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p
 function exportPending(){dl(people.filter(p=>!p.contatado).map(p=>({'Nº':p.n,'Nome':p.nome,'Telefone':p.tel,'Situação':p.situacao,'Responsável':p.resp,'WhatsApp':p.wa||''})),'ComunidadeDaFe_AContatar');toast('Pendentes exportados');}
 function toISODate(s){s=(s||'').trim();if(!s)return '';let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return m[1]+'-'+String(m[2]).padStart(2,'0')+'-'+String(m[3]).padStart(2,'0');m=s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})/);if(m){let d=m[1],mo=m[2],y=m[3];if(y.length===2)y=(+y>30?'19':'20')+y;if(+mo>12&&+d<=12){const t=d;d=mo;mo=t;}return y+'-'+String(mo).padStart(2,'0')+'-'+String(d).padStart(2,'0');}return '';}
 function parseCSV(text){const lines=[];let row=[],cur='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}else{if(c==='"')q=true;else if(c===','){row.push(cur);cur='';}else if(c==='\n'){row.push(cur);lines.push(row);row=[];cur='';}else if(c==='\r'){}else cur+=c;}}if(cur!==''||row.length){row.push(cur);lines.push(row);}if(!lines.length)return [];const head=lines[0].map(h=>h.trim());return lines.slice(1).filter(r=>r.some(x=>(x||'').trim()!=='')).map(r=>{const o={};head.forEach((h,i)=>o[h]=(r[i]||'').trim());return o;});}
-function rowToPerson(get,maxN,sufix){const nome=get('nome')||get('nome completo');if(!nome)return null;const tel=get('whatsapp')||get('telefone')||get('fone')||get('celular');const aulas=get('aulas')||get('participar'),camiseta=get('camiseta'),sexo=get('sexo');const ex=[];if(aulas)ex.push('Aulas: '+aulas);if(sexo)ex.push('Sexo: '+sexo);const obs=[(get('observ')||get('mensagem')||''),ex.join(' \u00b7 ')].filter(Boolean).join(' \u2014 ');return {id:'p'+Date.now()+'-'+sufix,n:maxN,nome,tel,email:get('mail')||get('e-mail'),bairro:get('bairro')||get('cidade')||get('endere\u00e7o'),nasc:toISODate(get('nascimento')||get('nasc')),situacao:get('situ')||'Visitante',grupo:get('grupo')||get('c\u00e9lula')||get('celula'),resp:get('respons')||get('volunt')||get('l\u00edder'),contatado:false,dataContato:'',batismo:!!get('fase')||/batismo|batizar/i.test(get('interesse')||''),fase:get('fase')||'',statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:camiseta,obs:obs,criadoEm:new Date().toISOString(),updated:nowStr()};}
+function mapFase(s){s=(s||'').toLowerCase();const d=s.includes('decis'),i=s.includes('inten');if(d&&i)return 'Decisão + Intenção';if(i)return 'Intenção Batismo';if(d)return 'Decisão';return '';}
+function mapResp(s){s=(s||'').toLowerCase().trim();if(s.includes('quero'))return 'Quero me Batizar';if(s.includes('batizado')||s.includes('já sou')||s.includes('ja sou'))return 'Já sou Batizado';if(s.includes('interesse'))return 'Não Tenho Interesse';return 'Sem Resposta';}
+function rowToPerson(get,maxN,sufix){const nome=get('nome')||get('nome completo');if(!nome)return null;const tel=get('whatsapp')||get('telefone')||get('fone')||get('celular');const aulas=get('aulas')||get('participar'),camiseta=get('camiseta'),sexo=get('sexo');const ex=[];if(aulas)ex.push('Aulas: '+aulas);if(sexo)ex.push('Sexo: '+sexo);const obs=[(get('observ')||get('mensagem')||''),ex.join(' \u00b7 ')].filter(Boolean).join(' \u2014 ');return {id:'p'+Date.now()+'-'+sufix,n:maxN,nome,tel,email:get('mail')||get('e-mail'),bairro:get('bairro')||get('cidade')||get('endere\u00e7o'),nasc:toISODate(get('nascimento')||get('nasc')),situacao:get('situ')||'Visitante',grupo:get('grupo')||get('c\u00e9lula')||get('celula'),resp:get('respons')||get('volunt')||get('l\u00edder'),contatado:false,dataContato:'',batismo:!!get('fase')||/batismo|batizar/i.test(get('interesse')||''),fase:mapFase(get('fase')),statusContato:STATUS[0],resposta:RESP[0],wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:camiseta,obs:obs,criadoEm:new Date().toISOString(),updated:nowStr()};}
 function dedupKey(p){return (p.nome||'').toLowerCase().trim()+'|'+(p.tel||'').replace(/\D/g,'').slice(-8);}
 function importRows(rows,asBatismo){
   const existing=new Set(people.map(dedupKey));let add=0,skip=0,maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);
@@ -1051,6 +1056,10 @@ function applyIdentity(){
 function saveIdentity(){identity={nm1:byId('iNm1').value.trim()||'Comunidade',nm2:byId('iNm2').value.trim()||'da Fé',tag:byId('iTag').value.trim()||'Church',eyebrow:identity.eyebrow,verse:byId('iVerse').value.trim()||DEFAULT_IDENTITY.verse,ref:byId('iRef').value.trim()||'João 3.16'};if(CONNECTED){backendPost({action:'setConfig',key:'identity',value:identity});}else{safeSet(IK,identity);}applyIdentity();logH('Configuração','Identidade da igreja atualizada');toast('Identidade atualizada');}
 
 /* ====================== LOGIN / LOGOUT ====================== */
+function saveSession(){try{localStorage.setItem('cf_sess',JSON.stringify({role:session.role,user:session.user,token:session.token||''}));}catch(e){}}
+function loadSession(){try{return JSON.parse(localStorage.getItem('cf_sess')||'null');}catch(e){return null;}}
+function clearSession(){try{localStorage.removeItem('cf_sess');}catch(e){}}
+function enterApp(role,user){byId('loginErr').textContent='';byId('loginPass').value='';byId('loginScreen').style.display='none';byId('roleTxt').textContent=role==='admin'?'Administrador':'Gestão';byId('nav-admin').classList.toggle('role-hide',role!=='admin');byId('secSistema').classList.toggle('role-hide',role!=='admin');startApp();}
 async function doLogin(){
   const u=byId('loginUser').value.trim(),p=byId('loginPass').value;
   byId('loginErr').textContent='';
@@ -1071,15 +1080,11 @@ async function doLogin(){
     if(!role){byId('loginErr').textContent='Usuário ou senha inválidos.';byId('loginPass').value='';return;}
     session={role,user:u,token:''};
   }
-  byId('loginErr').textContent='';byId('loginPass').value='';
-  byId('loginScreen').style.display='none';
-  byId('roleTxt').textContent=role==='admin'?'Administrador':'Gestão';
-  byId('nav-admin').classList.toggle('role-hide',role!=='admin');
-  byId('secSistema').classList.toggle('role-hide',role!=='admin');
-  startApp();
+  saveSession();
+  enterApp(role,u);
   logH('Login','Acesso como '+role+' ('+u+')');
 }
-function logout(){logH('Logout','Saiu da plataforma');session={role:'',user:''};byId('loginUser').value='';byId('loginPass').value='';byId('loginScreen').style.display='grid';go('dash');}
+function logout(){logH('Logout','Saiu da plataforma');clearSession();session={role:'',user:'',token:''};byId('loginUser').value='';byId('loginPass').value='';byId('loginScreen').style.display='grid';go('dash');}
 
 /* ====================== ADMIN ====================== */
 function renderAdmin(){
@@ -1120,9 +1125,15 @@ function startApp(){applyIdentity();fillAllFilters();updateCounts();renderDash()
 async function refreshFromServer(){
   if(!CONNECTED||!session.role)return;
   if(byId('overlay').classList.contains('open')||byId('modalOv').classList.contains('open')||byId('attOv').classList.contains('open'))return;
+  if(Date.now()-lastLocalChange<12000)return;
   try{const d=await jsonp({action:'load',token:(session&&session.token)||''});if(d&&d.ok){people=d.people||people;groups=d.groups||groups;events=d.events||events;history=d.history||history;if(d.identity){identity=d.identity;applyIdentity();}fillAllFilters();refreshActive();}}catch(e){}
 }
-(async function init(){if(CONNECTED){applyIdentity();}else{await loadData();applyIdentity();}})();
+(async function init(){
+  if(CONNECTED){applyIdentity();
+    const ss=loadSession();
+    if(ss&&ss.token&&ss.role){session={role:ss.role,user:ss.user,token:ss.token};const ok=await loadData();if(ok){enterApp(ss.role,ss.user);return;}clearSession();session={role:'',user:'',token:''};}
+  }else{await loadData();applyIdentity();}
+})();
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 </body>
