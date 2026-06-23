@@ -234,7 +234,8 @@ tbody td{padding:12px 18px;vertical-align:middle}
 .revisar-note{background:#FBF1F1;border:1px solid #F0DCDC;color:#8A4646;border-radius:11px;padding:11px 13px;font-size:12.5px;font-weight:500;margin-bottom:18px;display:flex;gap:9px}
 .revisar-note svg{width:16px;height:16px;flex:none;margin-top:1px}
 .panel-meta{font-size:11.5px;color:var(--muted-2);margin-top:6px}
-.panel-actions{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;flex:none;background:var(--surface)}
+.panel-actions{padding:16px 24px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;flex:none;background:var(--surface)}
+.confirm-btn{background:#fff;color:#1B8F4D;box-shadow:inset 0 0 0 1px #BFE3CC}.confirm-btn:hover{background:#F1FAF4}.confirm-btn.confirmed{background:var(--wa);color:#fff;box-shadow:none}
 .wa-cta{flex:1;background:var(--wa);color:#fff;justify-content:center}.wa-cta:hover{background:#1FB857}
 .wa-cta.off{background:#EDEDF0;color:var(--muted-2);pointer-events:none}
 .del-btn{background:#fff;color:var(--rose);box-shadow:inset 0 0 0 1px #E8CFCF}.del-btn:hover{background:#FBF1F1}
@@ -660,6 +661,7 @@ body.not-admin .admin-only{display:none!important}
   <div class="panel-body" id="panelBody"></div>
   <div class="panel-actions">
     <button class="btn del-btn" onclick="delPerson()" title="Excluir da plataforma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/></svg>Excluir</button>
+    <button class="btn confirm-btn" id="pnConfirm" onclick="confirmCand()" title="Confirmar candidato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span class="lbl">Confirmar</span></button>
     <a class="btn wa-cta" id="pnWa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.01c-.24.68-1.42 1.31-1.95 1.36-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.66-.61-2.92-1.26-4.83-4.2-4.97-4.39-.15-.2-1.19-1.58-1.19-3.01s.75-2.13 1.02-2.43c.27-.29.58-.36.77-.36l.56.01c.18 0 .42-.07.66.5.24.59.82 2.02.89 2.17.07.15.12.32.02.51-.09.2-.14.32-.28.49l-.42.49c-.14.14-.28.29-.12.57.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.21 1.36.27.14.43.12.59-.07.16-.2.68-.79.86-1.06.18-.27.36-.22.61-.13.24.09 1.55.73 1.81.86.27.13.45.2.51.31.07.11.07.63-.17 1.31Z"/></svg>WhatsApp</a>
   </div>
 </aside>
@@ -1020,7 +1022,8 @@ function openPanel(id){
   current=people.find(p=>p.id===id);if(!current)return;const p=current;
   byId('pnMeta').textContent=(p.n?'Nº '+p.n+' · ':'')+(p.resp||'sem responsável');
   byId('pnName').textContent=p.nome;byId('pnTel').textContent=p.tel||'Sem telefone';
-  const wa=byId('pnWa');if(p.wa){wa.href=p.wa;wa.classList.remove('off');}else{wa.removeAttribute('href');wa.classList.add('off');}
+  const wa=byId('pnWa');if(p.wa){wa.href=waMsg(p);wa.classList.remove('off');}else{wa.removeAttribute('href');wa.classList.add('off');}
+  const cb=byId('pnConfirm');if(cb){cb.classList.toggle('confirmed',!!p.confirmado);const lb=cb.querySelector('.lbl');if(lb)lb.textContent=p.confirmado?'Confirmado':'Confirmar';}
   const rv=p.origem==='REVISAR'?`<div class="revisar-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg><div><b>Revisar telefone.</b> ${esc(p.motivo||'Telefone inválido/incompleto')} — confira antes de contatar.</div></div>`:'';
   byId('panelBody').innerHTML=`
     ${rv}
@@ -1070,6 +1073,7 @@ function setBatizouAguas(v){current.batizouAguas=v;stamp();refreshSeg('segBatizo
 function setCafe(v){current.cafeStart=v;stamp();refreshSeg('segCafe',['Sim','Não'],v);const vf=byId('veredasFld');if(vf)vf.style.display=v==='Sim'?'':'none';scheduleSave();logH('Batismo',current.nome+' → Café Start: '+v);}
 function setVeredas(v){current.veredas=v;stamp();refreshSeg('segVeredas',['Sim','Não'],v);scheduleSave();logH('Batismo',current.nome+' → Veredas: '+v);}
 function refreshSeg(id,arr,sel){[...byId(id).children].forEach((b,i)=>b.classList.toggle('sel',arr[i]===sel));}
+function confirmCand(){if(!current)return;const id=current.id;current.confirmado=!current.confirmado;if(current.confirmado&&current.origem==='REVISAR')current.origem='';const c=current.confirmado;stamp();scheduleSave();logH('Batismo',current.nome+(c?' → confirmado':' → confirmação removida'));toast(c?'Candidato confirmado':'Confirmação removida');fillAllFilters();refreshActive();openPanel(id);}
 function delPerson(){if(!current)return;if(!confirm('Excluir '+current.nome+' definitivamente?'))return;const _nm=current.nome;people=people.filter(p=>p.id!==current.id);scheduleSave();closePanel();logH('Exclusão','Pessoa removida: '+_nm);toast('Pessoa removida');}
 
 /* ====================== NOVA PESSOA ====================== */
