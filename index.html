@@ -466,6 +466,12 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
           <select class="filter" id="bFase" onchange="renderBatismo()"></select>
           <select class="filter" id="bStatus" onchange="renderBatismo()"></select>
           <select class="filter" id="bResp" onchange="renderBatismo()"></select>
+          <select class="filter" id="bGrupo" onchange="renderBatismo()">
+            <option value="">Todos os grupos</option>
+            <option value="batismo">Batismo</option>
+            <option value="cafe">Café Start</option>
+            <option value="veredas">Veredas</option>
+          </select>
           <div class="period-grp" style="display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px 11px;white-space:nowrap">
             <span style="font-size:12px;color:var(--muted);font-weight:600">Batizados</span>
             <input id="bDe" type="date" title="de" onchange="renderBatismo()" style="border:none;font-family:inherit;font-size:13px;color:var(--ink);background:transparent;outline:none;padding:0">
@@ -934,8 +940,8 @@ function renderBatismo(){
   charts.b_status=new Chart(byId('chStatus'),{type:'bar',data:{labels:['Não contat.','1º contato','Aguardando','Confirmado'],datasets:[{data:STATUS.map(s=>set.filter(p=>p.statusContato===s).length),backgroundColor:PAL,borderRadius:6,maxBarThickness:46}]},options:barOpts()});
   const vols=[...new Set(set.map(p=>p.resp).filter(Boolean))].sort();
   charts.b_vol=new Chart(byId('chVol'),{type:'bar',data:{labels:vols.map(v=>v.split(' ')[0]),datasets:[{label:'Atribuídos',data:vols.map(v=>set.filter(p=>p.resp===v).length),backgroundColor:'#C7C7CE',borderRadius:5,maxBarThickness:28},{label:'Quero me batizar',data:vols.map(v=>set.filter(p=>p.resp===v&&p.resposta==='Quero me Batizar').length),backgroundColor:'#15151A',borderRadius:5,maxBarThickness:28}]},options:barOpts2()});
-  const q=byId('bQ').value.trim().toLowerCase(),fv=byId('bVol').value,ff=byId('bFase').value,fst=byId('bStatus').value,frp=byId('bResp').value,de=byId('bDe').value,ate=byId('bAte').value;
-  const rows=set.filter(p=>{if(de||ate){const d=p.dataBatismo||'';if(!d)return false;if(de&&d<de)return false;if(ate&&d>ate)return false;}if(fv&&p.resp!==fv)return false;if(ff&&p.fase!==ff)return false;if(fst&&p.statusContato!==fst)return false;if(frp&&p.resposta!==frp)return false;if(q&&!(p.nome.toLowerCase().includes(q)||(p.tel||'').toLowerCase().includes(q)))return false;return true;}).sort((a,b)=>(a.n||0)-(b.n||0));
+  const q=byId('bQ').value.trim().toLowerCase(),fv=byId('bVol').value,ff=byId('bFase').value,fst=byId('bStatus').value,frp=byId('bResp').value,fg=(byId('bGrupo')?byId('bGrupo').value:''),de=byId('bDe').value,ate=byId('bAte').value;
+  const rows=set.filter(p=>{if(de||ate){const d=p.dataBatismo||'';if(!d)return false;if(de&&d<de)return false;if(ate&&d>ate)return false;}if(fv&&p.resp!==fv)return false;if(ff&&p.fase!==ff)return false;if(fst&&p.statusContato!==fst)return false;if(frp&&p.resposta!==frp)return false;if(fg==='batismo'&&p.batizou!=='Sim')return false;if(fg==='cafe'&&p.cafeStart!=='Sim')return false;if(fg==='veredas'&&p.veredas!=='Sim')return false;if(q&&!(p.nome.toLowerCase().includes(q)||(p.tel||'').toLowerCase().includes(q)))return false;return true;}).sort((a,b)=>(a.n||0)-(b.n||0));
   byId('bCount').innerHTML=`<b>${rows.length}</b> de ${set.length} candidatos`;
   const tb=byId('bBody'),emp=byId('bEmpty');
   if(!rows.length){tb.innerHTML='';emp.style.display='block';}else{emp.style.display='none';
@@ -1034,7 +1040,7 @@ function openPanel(id){
       <div class="fld"><label>Situação do contato</label><div class="seg" id="segStatus">${STATUS.map(s=>optHTML(s,p.statusContato===s,"setStatus")).join('')}</div></div>
       <div class="fld"><label>Resposta da pessoa</label><div class="seg" id="segResp">${RESP.map(s=>optHTML(s,p.resposta===s,"setResp")).join('')}</div></div>
       <div class="sec-title" style="margin-top:14px">Jornada pós-batismo</div>
-      <div class="fld"><label>Batizou nas águas?</label><div class="seg" id="segBatizou">${optHTML('Sim',p.batizou==='Sim','setBatizou')}${optHTML('Não',p.batizou==='Não','setBatizou')}</div></div>
+      <div class="fld"><label>Participou das Aulas de Batismo?</label><div class="seg" id="segBatizou">${optHTML('Sim',p.batizou==='Sim','setBatizou')}${optHTML('Não',p.batizou==='Não','setBatizou')}</div></div>
       <div id="batizouFields" style="${p.batizou==='Sim'?'':'display:none'}">
         <div class="fld"><label>Foi presencial ou online?</label><div class="seg" id="segModal">${optHTML('Presencial',p.modalidade==='Presencial','setModalidade')}${optHTML('Online',p.modalidade==='Online','setModalidade')}</div></div>
         <div class="fld"><label>Data do batismo</label><input type="date" value="${esc(p.dataBatismo||'')}" onchange="upd('dataBatismo',this.value)"></div>
