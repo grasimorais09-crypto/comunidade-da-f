@@ -238,7 +238,7 @@ tbody td{padding:12px 18px;vertical-align:middle}
 .wa-cta{flex:1;background:var(--wa);color:#fff;justify-content:center}.wa-cta:hover{background:#1FB857}
 .wa-cta.off{background:#EDEDF0;color:var(--muted-2);pointer-events:none}
 .del-btn{background:#fff;color:var(--rose);box-shadow:inset 0 0 0 1px #E8CFCF}.del-btn:hover{background:#FBF1F1}
-body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{display:none!important}
+body.not-admin .admin-only{display:none!important}
 
 .modal-ov{position:fixed;inset:0;background:rgba(11,11,14,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:.2s;z-index:60;display:grid;place-items:center;padding:20px}
 .modal-ov.open{opacity:1;pointer-events:auto}
@@ -916,7 +916,7 @@ function waCell(p){return p.wa?`<div class="rowacts"><a class="iconbtn wa-btn" h
 function waIcon(p){return p.wa?`<a class="iconbtn wa-btn" href="${waMsg(p)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Z"/></svg></a>`:`<span class="iconbtn wa-btn wa-off"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Z"/></svg></span>`;}
 function delIcon(p){return `<button class="iconbtn del-row" onclick="event.stopPropagation();removePerson('${p.id}')" title="Excluir da plataforma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6"/></svg></button>`;}
 function actCell(p){return `<div class="rowacts">${waIcon(p)}${delIcon(p)}</div>`;}
-function removePerson(id){if(session.role!=='admin'){toast('Apenas o administrador pode excluir.');return;}const p=people.find(x=>x.id===id);if(!p)return;if(!confirm('Excluir '+p.nome+' da plataforma? Esta ação não pode ser desfeita.'))return;people=people.filter(x=>x.id!==id);if(current&&current.id===id)closePanel();scheduleSave();logH('Exclusão','Pessoa removida: '+p.nome);fillAllFilters();refreshActive();toast(p.nome.split(' ')[0]+' removido(a) da plataforma');}
+function removePerson(id){const p=people.find(x=>x.id===id);if(!p)return;if(!confirm('Excluir '+p.nome+' da plataforma? Esta ação não pode ser desfeita.'))return;people=people.filter(x=>x.id!==id);if(current&&current.id===id)closePanel();scheduleSave();logH('Exclusão','Pessoa removida: '+p.nome);fillAllFilters();refreshActive();toast(p.nome.split(' ')[0]+' removido(a) da plataforma');}
 
 /* ====================== BATISMO ====================== */
 function bSet(){return people.filter(p=>p.batismo);}
@@ -1070,7 +1070,7 @@ function setBatizouAguas(v){current.batizouAguas=v;stamp();refreshSeg('segBatizo
 function setCafe(v){current.cafeStart=v;stamp();refreshSeg('segCafe',['Sim','Não'],v);const vf=byId('veredasFld');if(vf)vf.style.display=v==='Sim'?'':'none';scheduleSave();logH('Batismo',current.nome+' → Café Start: '+v);}
 function setVeredas(v){current.veredas=v;stamp();refreshSeg('segVeredas',['Sim','Não'],v);scheduleSave();logH('Batismo',current.nome+' → Veredas: '+v);}
 function refreshSeg(id,arr,sel){[...byId(id).children].forEach((b,i)=>b.classList.toggle('sel',arr[i]===sel));}
-function delPerson(){if(session.role!=='admin'){toast('Apenas o administrador pode excluir.');return;}if(!current)return;if(!confirm('Excluir '+current.nome+' definitivamente?'))return;const _nm=current.nome;people=people.filter(p=>p.id!==current.id);scheduleSave();closePanel();logH('Exclusão','Pessoa removida: '+_nm);toast('Pessoa removida');}
+function delPerson(){if(!current)return;if(!confirm('Excluir '+current.nome+' definitivamente?'))return;const _nm=current.nome;people=people.filter(p=>p.id!==current.id);scheduleSave();closePanel();logH('Exclusão','Pessoa removida: '+_nm);toast('Pessoa removida');}
 
 /* ====================== NOVA PESSOA ====================== */
 function openForm(asBatismo){
