@@ -448,12 +448,6 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
         </div>
       </div>
       <div class="viewbody">
-        <div class="kpis" id="bKpis"></div>
-        <div class="grid3">
-          <div class="card"><div class="card-h"><h3>Por fase</h3><span class="eyebrow">decisão · intenção</span></div><div class="chart-wrap"><canvas id="chFase"></canvas></div></div>
-          <div class="card"><div class="card-h"><h3>Situação do contato</h3><span class="eyebrow">funil</span></div><div class="chart-wrap"><canvas id="chStatus"></canvas></div></div>
-          <div class="card"><div class="card-h"><h3>Carga por voluntário</h3><span class="eyebrow">total vs. confirmados</span></div><div class="chart-wrap"><canvas id="chVol"></canvas></div></div>
-        </div>
         <div class="formbox">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
           <div class="tx"><b>Formulário de batismo (Google Forms)</b><small>Cole o link CSV da planilha de respostas do formulário de batismo (publicada na web). Quem se inscreveu entra automaticamente como candidato a batismo.</small></div>
@@ -479,6 +473,12 @@ body.not-admin .del-row,body.not-admin .del-btn,body.not-admin .admin-only{displ
             <input id="bAte" type="date" title="até" onchange="renderBatismo()" style="border:none;font-family:inherit;font-size:13px;color:var(--ink);background:transparent;outline:none;padding:0">
           </div>
           <span class="count-pill" id="bCount"></span>
+        </div>
+        <div class="kpis" id="bKpis"></div>
+        <div class="grid3">
+          <div class="card"><div class="card-h"><h3>Por fase</h3><span class="eyebrow">decisão · intenção</span></div><div class="chart-wrap"><canvas id="chFase"></canvas></div></div>
+          <div class="card"><div class="card-h"><h3>Situação do contato</h3><span class="eyebrow">funil</span></div><div class="chart-wrap"><canvas id="chStatus"></canvas></div></div>
+          <div class="card"><div class="card-h"><h3>Carga por voluntário</h3><span class="eyebrow">total vs. confirmados</span></div><div class="chart-wrap"><canvas id="chVol"></canvas></div></div>
         </div>
         <div class="tablecard">
           <table><thead><tr><th>#</th><th>Contato</th><th>Fase</th><th>Voluntário</th><th>Situação</th><th>Resposta</th><th>Batizou</th><th></th></tr></thead><tbody id="bBody"></tbody></table>
