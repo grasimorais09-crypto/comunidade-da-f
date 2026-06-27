@@ -1094,7 +1094,7 @@ function closeForm(){byId('modalOv').classList.remove('open');}
 function savePerson(){
   const nome=byId('fNome').value.trim();if(!nome){byId('fNome').focus();byId('fNome').style.borderColor='#C97A7A';return;}
   const tel=byId('fTel').value.trim(),maxN=people.reduce((m,p)=>Math.max(m,p.n||0),0);
-  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:mapResp(get('resposta')),wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:byId('fCamiseta').value.trim(),obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
+  people.push({id:'p'+Date.now(),n:maxN+1,nome,tel,email:byId('fEmail').value.trim(),bairro:byId('fBairro').value.trim(),nasc:byId('fNasc').value,situacao:byId('fSit').value,grupo:byId('fGrupo').value.trim(),resp:byId('fResp').value.trim(),contatado:false,dataContato:'',batismo:byId('fBat').classList.contains('on'),fase:'Decisão',statusContato:STATUS[0],resposta:'Sem Resposta',wa:waFromTel(tel),origem:'OK',motivo:null,camiseta:byId('fCamiseta').value.trim(),obs:byId('fObs').value.trim(),criadoEm:new Date().toISOString(),updated:nowStr()});
   scheduleSave();closeForm();fillAllFilters();refreshActive();logH('Cadastro','Nova pessoa: '+nome+(byId('fBat').classList.contains('on')?' (candidato batismo)':''));toast(nome.split(' ')[0]+' cadastrado(a) com sucesso');
 }
 
