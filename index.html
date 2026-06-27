@@ -1130,11 +1130,7 @@ function renderVoluntarios(){
   let keys=order;if(ff)keys=order.filter(k=>k===ff);
   keys.sort((a,b)=>a==='__sem'?1:b==='__sem'?-1:a.localeCompare(b,'pt'));
   const vols=volList();
-  byId('vBody').innerHTML=keys.length?keys.map(k=>{
-    const list=groups[k].sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
-    const title=k==='__sem'?'Sem voluntário':k;
-    return '<div class="card" style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><b style="font-size:15px">'+esc(title)+'</b><span class="count-pill">'+list.length+' candidato(s)</span></div><div class="tablecard" style="box-shadow:none;border:none"><table><thead><tr><th>Candidato</th><th>Telefone</th><th>Voluntário</th><th>Contato</th><th></th></tr></thead><tbody>'+list.map(p=>'<tr><td class="c-name">'+esc(p.nome)+'</td><td style="color:var(--muted)">'+esc(p.tel||'—')+'</td><td><select class="filter" onchange="assignVol(\''+p.id+'\',this.value)"><option value="">— sem —</option>'+vols.map(v=>'<option value="'+esc(v)+'" '+((p.resp||'')===v?'selected':'')+'>'+esc(v)+'</option>').join('')+'</select></td><td>'+(p.contatado?'<span class="dot-yes"><span class="i"></span>Sim</span>':'<span class="dot-no"><span class="i"></span>Não</span>')+'</td><td>'+(waMsg(p)?'<a class="btn btn-out btn-sm" href="'+waMsg(p)+'" target="_blank" rel="noopener" style="text-decoration:none">WhatsApp</a>':'<span style="color:var(--muted);font-size:12px">sem nº</span>')+'</td></tr>').join('')+'</tbody></table></div></div>';
-  }).join(''):'<div class="mini-empty">Nenhum candidato encontrado. Importe a distribuição ou cadastre candidatos.</div>';
+  byId('vBody').innerHTML='';
 }
 function exportVoluntarios(){const rows=bSet().slice().sort((a,b)=>(a.resp||'~').localeCompare(b.resp||'~','pt')||a.nome.localeCompare(b.nome,'pt')).map(p=>({'Voluntário':p.resp||'','Nome':p.nome,'Telefone':p.tel||'','WhatsApp':p.wa||'','Contato feito':p.contatado?'Sim':'Não','Tamanho camiseta':p.camiseta||'','Mensagem':getMsgText(activeTheme()).replace(/\[Nome\]/g,firstName(p.nome))}));if(!rows.length){toast('Nada para exportar.');return;}dl(rows,'ComunidadeDaFe_Voluntarios');toast('Distribuição exportada');}
 
